@@ -259,3 +259,34 @@ textarea.sql:focus { outline: 2px solid var(--lime); border-color: var(--ink); }
 
 .banner { background: var(--panel); border-left: 4px solid var(--gold); border-radius: 0; padding: 12px 15px; font-size: 13px; color: var(--ink); margin-bottom: 16px; }
 .err { color: var(--coral); font-size: 13.5px; font-weight: 600; margin-top: 6px; }
+
+/* ---- animated explainer ("video") ---- */
+.explainer { max-width: 640px; margin: 12px auto 0; }
+.exp-frame { position: relative; background: var(--dark); color: var(--on-dark); border: 1px solid var(--dark); padding: 24px; min-height: 320px; overflow: hidden; }
+.exp-tag { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lime); }
+.stage { margin: 18px auto 0; max-width: 300px; display: flex; flex-direction: column; gap: 6px; }
+.stage-head { display: flex; gap: 8px; }
+.scol { flex: 1; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); background: var(--dark-2); padding: 6px 9px; }
+.srow { display: flex; gap: 8px; background: var(--dark-2); padding: 8px 9px; font-family: var(--mono); font-size: 13px; color: var(--on-dark); }
+.srow span:first-child { flex: 1; }
+.anim-columns .scol { animation: popIn 0.5s var(--d, 0s) both; }
+.anim-rows .srow { animation: slideIn 0.5s var(--d, 0s) both; }
+.anim-star .srow, .anim-star .scol { animation: glowbg 1.3s infinite alternate; }
+.anim-filter .srow.dim { opacity: 0.2; }
+.anim-filter .srow.keep { box-shadow: inset 0 0 0 2px var(--lime); color: var(--lime); }
+.anim-sort .srow { animation: sweep 1.8s var(--d, 0s) infinite; }
+@keyframes popIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; } }
+@keyframes slideIn { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
+@keyframes glowbg { from { background: var(--dark-2); } to { background: #22421f; } }
+@keyframes sweep { 0%, 100% { background: var(--dark-2); } 50% { background: #26421f; } }
+.exp-bit { display: flex; align-items: flex-end; gap: 12px; margin-top: 20px; }
+.bit { font-size: 36px; line-height: 1; animation: bob 2s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.exp-caption { background: var(--lime); color: var(--on-lime); padding: 13px 16px; font-weight: 700; font-size: 16.5px; flex: 1; animation: capIn 0.35s ease; }
+@keyframes capIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+.exp-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(255, 255, 255, 0.12); }
+.exp-progress > i { display: block; height: 100%; background: var(--lime); transition: width 0.12s linear; }
+.exp-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.exp-dots { display: flex; gap: 6px; }
+.exp-dots span { width: 9px; height: 9px; background: var(--line-2); cursor: pointer; }
+.exp-dots span.on { background: var(--dark); }

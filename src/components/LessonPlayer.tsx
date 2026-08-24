@@ -5,6 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Lesson } from "@/content/curriculum";
 import { gradeQuery, previewTable, type QueryResult } from "@/lib/sqlEngine";
+import Explainer from "@/components/Explainer";
+import TapGame from "@/components/games/TapGame";
+import OrderGame from "@/components/games/OrderGame";
+import MatchGame from "@/components/games/MatchGame";
 
 type Status = "idle" | "correct" | "wrong";
 
@@ -42,6 +46,19 @@ export default function LessonPlayer({
   const [finished, setFinished] = useState<null | { streakCount: number; alreadyDone: boolean }>(null);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [phase, setPhase] = useState<"intro" | "play">(lesson.explainer ? "intro" : "play");
+
+  const isGame = challenge?.type === "tap" || challenge?.type === "order" || challenge?.type === "match";
+
+  // Games call this when the learner solves them interactively.
+  function handleSolved() {
+    setStatus("correct");
+    if (!solved.has(challenge.id)) {
+      setSolved(new Set(solved).add(challenge.id));
+      setToast(`+${challenge.xp} XP`);
+      setTimeout(() => setToast(null), 1600);
+    }
+  }
 
   // reset when moving to a new challenge
   useEffect(() => {
@@ -80,7 +97,7 @@ export default function LessonPlayer({
         correct = !!challenge.options?.[selected]?.correct;
       } else {
         const query = challenge.type === "build" ? placed.join(" ") : sql;
-        const g = await gradeQuery(lesson.datasetSql, query, challenge.solutionSql);
+        const g = await gradeQuery(lesson.datasetSql, query, challenge.solutionSql ?? "");
         setResult(g.result.error ? g.result : g.result);
         correct = g.correct;
       }
@@ -180,6 +197,21 @@ export default function LessonPlayer({
     );
   }
 
+  // Animated character intro before the challenges.
+  if (phase === "intro" && lesson.explainer) {
+    return (
+      <div className="lesson-shell">
+        <div className="lesson-top">
+          <Link href="/learn" style={{ fontSize: 20, color: "var(--ink-2)" }} aria-label="Close">
+            ✕
+          </Link>
+          <span className="mono small muted">{lesson.title}</span>
+        </div>
+        <Explainer data={lesson.explainer} title={lesson.title} onDone={() => setPhase("play")} />
+      </div>
+    );
+  }
+
   return (
     <div className="lesson-shell">
       <div className="lesson-top">
@@ -189,6 +221,16 @@ export default function LessonPlayer({
         <div className="progressbar">
           <i style={{ width: `${progress}%` }} />
         </div>
+        {lesson.explainer && (
+          <button
+            className="btn"
+            style={{ padding: "5px 10px", fontSize: 12, background: "transparent", color: "var(--ink-2)", border: "1px solid var(--line-2)" }}
+            onClick={() => setPhase("intro")}
+            title="Watch the intro again"
+          >
+            ↺ intro
+          </button>
+        )}
         <span className="mono small muted">
           {idx + 1}/{challenges.length}
         </span>
@@ -206,16 +248,37 @@ export default function LessonPlayer({
       {challenge.story && <div className="story">🕵️ {challenge.story}</div>}
       <h3 className="prompt-q">{challenge.prompt}</h3>
 
-      {/* data preview toggle */}
-      <button
-        className="btn btn-ghost small"
-        style={{ padding: "6px 12px", marginBottom: 12 }}
-        onClick={() => setShowData((s) => !s)}
-        type="button"
-      >
-        {showData ? "Hide" : "Show"} the {lesson.tables[0]} table
-      </button>
-      {showData && preview && <ResultTable result={preview} />}
+      {/* data preview toggle (SQL challenges only) */}
+      {!isGame && (
+        <>
+          <button
+            className="btn btn-ghost small"
+            style={{ padding: "6px 12px", marginBottom: 12 }}
+            onClick={() => setShowData((s) => !s)}
+            type="button"
+          >
+            {showData ? "Hide" : "Show"} the {lesson.tables[0]} table
+          </button>
+          {showData && preview && <ResultTable result={preview} />}
+        </>
+      )}
+
+      {/* ---- interactive games ---- */}
+      {challenge.type === "tap" && challenge.rows && (
+        <div style={{ marginTop: 12 }}>
+          <TapGame key={challenge.id} rows={challenge.rows} onSolved={handleSolved} />
+        </div>
+      )}
+      {challenge.type === "order" && challenge.items && (
+        <div style={{ marginTop: 12 }}>
+          <OrderGame key={challenge.id} items={challenge.items} onSolved={handleSolved} />
+        </div>
+      )}
+      {challenge.type === "match" && challenge.pairs && (
+        <div style={{ marginTop: 12 }}>
+          <MatchGame key={challenge.id} pairs={challenge.pairs} onSolved={handleSolved} />
+        </div>
+      )}
 
       {/* ---- per-type input ---- */}
       {challenge.type === "build" && (
@@ -323,7 +386,7 @@ export default function LessonPlayer({
           <button className="btn btn-primary" onClick={onContinue} disabled={saving}>
             {saving ? "Saving…" : idx < challenges.length - 1 ? "Continue →" : "Finish lesson 🎉"}
           </button>
-        ) : (
+        ) : isGame ? null : (
           <>
             <button className="btn btn-primary" onClick={onCheck} disabled={checking}>
               {checking ? "Running…" : challenge.type === "free" || challenge.type === "fixbug" || challenge.type === "build" ? "Run query" : "Check"}
