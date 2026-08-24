@@ -29,7 +29,8 @@ export default function TopBar({
     <nav className="topbar">
       <div className="wrap row">
         <Link className="brand" href="/learn">
-          <span className="logo">🦫</span> Querly
+          <span className="logo">Q</span>
+          <span className="wordmark">Querly</span>
         </Link>
         <div className="stats-row">
           {stats && (
@@ -48,8 +49,18 @@ export default function TopBar({
               </span>
             </>
           )}
-          <button className="btn btn-ghost" style={{ padding: "8px 12px", fontSize: 13 }} onClick={logout}>
-            {name ? `Log out` : "Log out"}
+          <button
+            className="btn"
+            style={{
+              padding: "8px 14px",
+              fontSize: 13,
+              background: "transparent",
+              color: "var(--on-dark)",
+              borderColor: "var(--on-dark)",
+            }}
+            onClick={logout}
+          >
+            Log out
           </button>
         </div>
       </div>

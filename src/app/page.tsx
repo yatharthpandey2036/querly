@@ -1,99 +1,135 @@
 import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { homePathForRole } from "@/lib/rbac";
-import { CURRICULUM } from "@/content/curriculum";
 
 export default async function Landing() {
   const session = await getSession();
-  const primaryHref = session ? homePathForRole(session.role) : "/login";
-  const primaryLabel = session ? "Continue learning →" : "Start free →";
+  const primaryHref = session ? homePathForRole(session.role) : "/login?mode=signup";
 
   return (
     <>
+      {/* nav */}
       <nav className="topbar">
         <div className="wrap row">
           <div className="brand">
-            <span className="logo">🦫</span> Querly
+            <span className="logo">Q</span>
+            <span className="wordmark">Querly</span>
           </div>
           <div className="stats-row">
-            <Link className="btn btn-ghost" href={primaryHref}>
+            <Link className="btn btn-ghost" href={session ? primaryHref : "/login"} style={{ padding: "10px 18px" }}>
               {session ? "Dashboard" : "Log in"}
             </Link>
           </div>
         </div>
       </nav>
 
-      <header className="hero">
-        <div className="wrap">
-          <span className="eyebrow">SQL · Databases · AI · for class 9–12</span>
-          <h1 style={{ marginTop: 16 }}>
-            Get <em>fluent in data</em>
-            <br /> before the world asks you to.
+      {/* hero — split lime / dark */}
+      <section className="hero-split">
+        <div className="hero-left">
+          <span className="eyebrow" style={{ color: "var(--on-lime)" }}>
+            SQL · Databases · AI
+          </span>
+          <h1 style={{ marginTop: 18 }}>
+            Get fluent in&nbsp;data.
           </h1>
-          <p className="lede">
-            Querly turns databases into a daily 4-minute game — real queries, instant answers, and
-            streaks that stick. Learn by playing, not by memorising.
+          <p style={{ fontSize: 19, maxWidth: "32ch", marginTop: 18, fontWeight: 500 }}>
+            Databases as a daily game. Real queries, instant answers, streaks that stick.
           </p>
           <div className="pill-row">
-            <span className="pill">🎮 Games &amp; puzzles</span>
-            <span className="pill">⚡ Real SQL, instant feedback</span>
-            <span className="pill">🦫 Bit, your AI tutor</span>
-            <span className="pill">🔥 Streaks &amp; XP</span>
+            <span className="pill">Games &amp; puzzles</span>
+            <span className="pill">AI tutor</span>
+            <span className="pill">Streaks &amp; XP</span>
           </div>
-          <div className="mt24" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link className="btn btn-primary" href={primaryHref}>
-              {primaryLabel}
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 30 }}>
+            <Link className="btn btn-dark" href={primaryHref}>
+              {session ? "Continue →" : "Start free →"}
             </Link>
             <Link className="btn btn-ghost" href="/login?role=parent">
-              I'm a parent
+              For parents
             </Link>
           </div>
         </div>
-      </header>
-
-      <section className="wrap" style={{ paddingBottom: 40 }}>
-        <div className="grid-3">
-          <div className="card pad">
-            <span className="tag t-brand">Play to learn</span>
-            <h3 style={{ marginTop: 12, fontSize: 18 }}>Every query is a puzzle</h3>
-            <p className="muted small mt8">
-              Build queries from blocks, fix broken ones, predict the output, and crack data
-              mysteries — all running on a real database in your browser.
-            </p>
-          </div>
-          <div className="card pad">
-            <span className="tag t-ai">Learn with AI</span>
-            <h3 style={{ marginTop: 12, fontSize: 18 }}>Bit never gives up on you</h3>
-            <p className="muted small mt8">
-              Stuck? Bit the beaver explains <i>why</i> in plain language and nudges you toward the
-              answer — hints, never spoilers.
-            </p>
-          </div>
-          <div className="card pad">
-            <span className="tag t-gold">Keep the streak</span>
-            <h3 style={{ marginTop: 12, fontSize: 18 }}>4 minutes a day</h3>
-            <p className="muted small mt8">
-              Earn XP, collect gems, and protect your streak. Basic to medium — always fun, never
-              a lecture.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt24 center">
-          <span className="eyebrow">Start here</span>
-          <div className="mt8 muted small">
-            {CURRICULUM.length} units · {CURRICULUM.reduce((n, u) => n + u.lessons.length, 0)}{" "}
-            lessons · from “what is a row?” to real filtering
+        <div className="hero-right">
+          <div className="codepanel">
+            <span className="c-dim">-- ask the data anything</span>
+            <br />
+            <span className="c-kw">SELECT</span> name, streak
+            <br />
+            <span className="c-kw">FROM</span> learners
+            <br />
+            <span className="c-kw">WHERE</span> fluent = <span className="c-str">true</span>
+            <br />
+            <span className="c-kw">ORDER BY</span> streak <span className="c-kw">DESC</span>;
           </div>
         </div>
       </section>
 
-      <footer className="wrap small muted" style={{ padding: "28px 20px 50px", borderTop: "1px solid var(--line)" }}>
-        <div className="spread" style={{ flexWrap: "wrap" }}>
-          <div className="brand" style={{ fontSize: 15 }}>
-            <span className="logo" style={{ width: 24, height: 24, fontSize: 14 }}>🦫</span> Querly
+      {/* stat strip */}
+      <section className="band band-panel">
+        <div className="band-inner" style={{ paddingTop: 48, paddingBottom: 48 }}>
+          <div className="statstrip">
+            <div className="bigstat">
+              <div className="n">3 min</div>
+              <div className="l">a day, that's it</div>
+            </div>
+            <div className="bigstat">
+              <div className="n">100%</div>
+              <div className="l">runs in the browser</div>
+            </div>
+            <div className="bigstat">
+              <div className="n">Real SQL</div>
+              <div className="l">on a live database</div>
+            </div>
+            <div className="bigstat">
+              <div className="n">0</div>
+              <div className="l">setup to start</div>
+            </div>
           </div>
-          <span className="mono">a shippable learning MVP · v0.1</span>
+        </div>
+      </section>
+
+      {/* feature boxes */}
+      <section className="wrap" style={{ paddingTop: 64, paddingBottom: 24 }}>
+        <h2 style={{ fontSize: "clamp(30px,4vw,44px)" }}>How it works</h2>
+        <div className="featgrid mt24">
+          <div className="featbox">
+            <span className="idx">01</span>
+            <h3>Play</h3>
+            <p>Build queries from blocks, fix broken ones, crack data mysteries — every step is a puzzle.</p>
+          </div>
+          <div className="featbox">
+            <span className="idx">02</span>
+            <h3>Learn with AI</h3>
+            <p>Stuck? Bit explains why in plain language and points the way. Hints, never spoilers.</p>
+          </div>
+          <div className="featbox">
+            <span className="idx">03</span>
+            <h3>Keep the streak</h3>
+            <p>Earn XP, collect gems, hold your streak. Come back tomorrow to keep it alive.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA band */}
+      <section className="band band-lime">
+        <div className="band-inner center" style={{ paddingTop: 72, paddingBottom: 72 }}>
+          <h2 style={{ fontSize: "clamp(34px,5vw,60px)", fontWeight: 900 }}>Ready to play?</h2>
+          <div style={{ marginTop: 26 }}>
+            <Link className="btn btn-dark" href={primaryHref}>
+              {session ? "Continue →" : "Start free →"}
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* footer */}
+      <footer className="band band-dark">
+        <div className="band-inner on-dark spread" style={{ paddingTop: 32, paddingBottom: 32, flexWrap: "wrap" }}>
+          <div className="brand">
+            <span className="logo">Q</span>
+            <span className="wordmark">Querly</span>
+          </div>
+          <span className="small" style={{ color: "#8a978f" }}>Learn data by playing.</span>
         </div>
       </footer>
     </>

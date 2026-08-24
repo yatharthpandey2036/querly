@@ -41,6 +41,7 @@ export default function LessonPlayer({
   const [preview, setPreview] = useState<QueryResult | null>(null);
   const [finished, setFinished] = useState<null | { streakCount: number; alreadyDone: boolean }>(null);
   const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   // reset when moving to a new challenge
   useEffect(() => {
@@ -91,6 +92,8 @@ export default function LessonPlayer({
       setStatus("correct");
       if (!solved.has(challenge.id)) {
         setSolved(new Set(solved).add(challenge.id));
+        setToast(`+${challenge.xp} XP`);
+        setTimeout(() => setToast(null), 1600);
       }
     } else {
       setStatus("wrong");
@@ -249,8 +252,14 @@ export default function LessonPlayer({
           className="sql"
           value={sql}
           onChange={(e) => setSql(e.target.value)}
+          onKeyDown={(e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && status !== "correct") {
+              e.preventDefault();
+              onCheck();
+            }
+          }}
           spellCheck={false}
-          placeholder="Type your SQL here…"
+          placeholder="Type your SQL here…  (⌘/Ctrl + Enter to run)"
         />
       )}
 
@@ -327,6 +336,8 @@ export default function LessonPlayer({
           </>
         )}
       </div>
+
+      {toast && <div className="toast">⭐ {toast}</div>}
     </div>
   );
 }
