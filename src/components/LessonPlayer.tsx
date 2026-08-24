@@ -189,6 +189,9 @@ export default function LessonPlayer({
               Back to path
             </Link>
           )}
+          <Link className="btn btn-ghost" href={`/lesson/${lesson.id}/notes`}>
+            📄 Notes
+          </Link>
           <Link className="btn btn-ghost" href="/learn">
             My path
           </Link>
@@ -231,6 +234,14 @@ export default function LessonPlayer({
             ↺ intro
           </button>
         )}
+        <Link
+          href={`/lesson/${lesson.id}/notes`}
+          className="btn"
+          style={{ padding: "5px 10px", fontSize: 12, background: "transparent", color: "var(--ink-2)", border: "1px solid var(--line-2)" }}
+          title="Revision notes"
+        >
+          📄 notes
+        </Link>
         <span className="mono small muted">
           {idx + 1}/{challenges.length}
         </span>

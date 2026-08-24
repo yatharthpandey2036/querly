@@ -62,29 +62,39 @@ export default async function LearnPage() {
                 const idx = order.indexOf(lesson.id);
                 const locked = !isDone && !isCurrent && idx > currentIndex && currentIndex !== -1;
                 const nodeClass = isDone ? "done" : isCurrent ? "current" : locked ? "locked" : "done";
-                const inner = (
-                  <div className="lesson-row">
-                    <div className={`node ${nodeClass}`}>
-                      {isDone ? "✓" : isCurrent ? "▶" : locked ? "🔒" : "•"}
-                    </div>
+                const glyph = isDone ? "✓" : isCurrent ? "▶" : locked ? "🔒" : "•";
+                return (
+                  <div className="lesson-row" key={lesson.id} style={{ opacity: locked ? 0.6 : 1 }}>
+                    {locked ? (
+                      <div className={`node ${nodeClass}`}>{glyph}</div>
+                    ) : (
+                      <Link href={`/lesson/${lesson.id}`} className={`node ${nodeClass}`}>
+                        {glyph}
+                      </Link>
+                    )}
                     <div className="lesson-meta">
-                      <h4>{lesson.title}</h4>
+                      {locked ? (
+                        <h4>{lesson.title}</h4>
+                      ) : (
+                        <Link href={`/lesson/${lesson.id}`}>
+                          <h4>{lesson.title}</h4>
+                        </Link>
+                      )}
                       <p>{lesson.subtitle}</p>
                     </div>
-                    <div>
+                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                       {isDone && <span className="tag t-brand">done</span>}
                       {isCurrent && <span className="tag t-gold">start</span>}
+                      <Link
+                        href={`/lesson/${lesson.id}/notes`}
+                        className="btn"
+                        style={{ padding: "5px 9px", fontSize: 12, background: "transparent", color: "var(--ink-2)", border: "1px solid var(--line-2)" }}
+                        title="Revision notes"
+                      >
+                        📄
+                      </Link>
                     </div>
                   </div>
-                );
-                return locked ? (
-                  <div key={lesson.id} style={{ opacity: 0.55 }}>
-                    {inner}
-                  </div>
-                ) : (
-                  <Link key={lesson.id} href={`/lesson/${lesson.id}`}>
-                    {inner}
-                  </Link>
                 );
               })}
             </div>
