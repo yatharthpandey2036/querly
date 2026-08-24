@@ -1,0 +1,769 @@
+<title>Querly</title>
+<style>
+  :root{
+    --bg:#F3F7F5; --surface:#FFFFFF; --surface-2:#EBF2EF; --surface-3:#E2ECE7;
+    --ink:#0E1B18; --ink-2:#47574F; --ink-3:#7B8A83;
+    --line:#DBE6E0; --line-2:#C8D6CE;
+    --brand:#0CA678; --brand-2:#087F5B; --brand-soft:#D7F2E7;
+    --ai:#4C6EF5; --ai-soft:#E1E7FF;
+    --gold:#F08C00; --gold-soft:#FFECD1;
+    --coral:#F03E3E; --coral-soft:#FFE3E3;
+    --shadow:0 1px 2px rgba(14,27,24,.05), 0 8px 24px rgba(14,27,24,.06);
+    --shadow-lg:0 24px 60px rgba(14,27,24,.14);
+    --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --r:16px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0A1512; --surface:#101E1A; --surface-2:#16261F; --surface-3:#1D3128;
+      --ink:#EAF3EF; --ink-2:#A4B6AE; --ink-3:#6C807A;
+      --line:#243A31; --line-2:#2F4B3F;
+      --brand:#26D9A3; --brand-2:#63E6BE; --brand-soft:#0F3129;
+      --ai:#7C97FF; --ai-soft:#1B2547;
+      --gold:#FFB84D; --gold-soft:#3A2A12;
+      --coral:#FF8080; --coral-soft:#3A1B1B;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.4);
+      --shadow-lg:0 24px 60px rgba(0,0,0,.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A1512; --surface:#101E1A; --surface-2:#16261F; --surface-3:#1D3128;
+    --ink:#EAF3EF; --ink-2:#A4B6AE; --ink-3:#6C807A;
+    --line:#243A31; --line-2:#2F4B3F;
+    --brand:#26D9A3; --brand-2:#63E6BE; --brand-soft:#0F3129;
+    --ai:#7C97FF; --ai-soft:#1B2547;
+    --gold:#FFB84D; --gold-soft:#3A2A12;
+    --coral:#FF8080; --coral-soft:#3A1B1B;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.4);
+    --shadow-lg:0 24px 60px rgba(0,0,0,.55);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--sans);line-height:1.6;
+    -webkit-font-smoothing:antialiased;font-size:16px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto} *{animation:none!important;transition:none!important}
+  }
+  h1,h2,h3,h4{text-wrap:balance;line-height:1.1;margin:0}
+  p{margin:0}
+  a{color:inherit}
+  .mono{font-family:var(--mono)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ---- eyebrow / labels ---- */
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-2);font-weight:600}
+  :root[data-theme="dark"] .eyebrow,:root:not([data-theme="light"]) .eyebrow{color:var(--brand)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .eyebrow{color:var(--brand)}}
+
+  /* ---- top nav ---- */
+  .nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 82%, transparent);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav .row{display:flex;align-items:center;gap:16px;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;font-size:18px}
+  .logo{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+    background:linear-gradient(150deg,var(--brand),var(--brand-2));color:#fff;font-size:17px;box-shadow:var(--shadow)}
+  .navlinks{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+  .navlinks a{font-size:13px;color:var(--ink-2);text-decoration:none;padding:6px 10px;border-radius:8px;font-weight:500}
+  .navlinks a:hover{background:var(--surface-2);color:var(--ink)}
+  .toggle{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
+    width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:15px;display:grid;place-items:center}
+  .toggle:hover{color:var(--ink);border-color:var(--line-2)}
+  @media(max-width:760px){.navlinks{display:none}}
+
+  /* ---- hero ---- */
+  .hero{padding:74px 0 46px;position:relative;overflow:hidden}
+  .hero .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+  @media(max-width:860px){.hero .grid{grid-template-columns:1fr;gap:32px}}
+  .hero h1{font-size:clamp(38px,6vw,64px);font-weight:850;letter-spacing:-.035em;margin:18px 0 0}
+  .hero h1 em{font-style:normal;color:var(--brand-2);position:relative;white-space:nowrap}
+  :root[data-theme="dark"] .hero h1 em,:root:not([data-theme="light"]) .hero h1 em{color:var(--brand)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hero h1 em{color:var(--brand)}}
+  .hero .lede{font-size:19px;color:var(--ink-2);margin-top:20px;max-width:44ch}
+  .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
+  .pill{font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:100px;border:1px solid var(--line);
+    background:var(--surface);color:var(--ink-2);display:inline-flex;gap:6px;align-items:center}
+  .pill b{color:var(--ink);font-weight:700}
+
+  /* phone in hero */
+  .phone{width:270px;margin:0 auto;border-radius:34px;background:var(--surface);
+    border:1px solid var(--line-2);box-shadow:var(--shadow-lg);padding:12px 12px 16px;position:relative}
+  .phone .notch{width:110px;height:6px;border-radius:100px;background:var(--line-2);margin:2px auto 12px}
+  .screen{background:var(--surface-2);border-radius:22px;padding:14px;min-height:440px}
+
+  /* ---- section skeleton ---- */
+  section{padding:56px 0;border-top:1px solid var(--line)}
+  .sec-head{max-width:60ch;margin-bottom:30px}
+  .sec-head h2{font-size:clamp(26px,3.6vw,36px);font-weight:820;letter-spacing:-.03em;margin-top:10px}
+  .sec-head p{color:var(--ink-2);margin-top:12px;font-size:17px}
+
+  /* generic cards */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.grid-3{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
+  .card h3{font-size:18px;font-weight:750;letter-spacing:-.01em}
+  .card p{color:var(--ink-2);font-size:14.5px;margin-top:8px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;font-family:var(--mono);letter-spacing:.04em}
+  .t-brand{background:var(--brand-soft);color:var(--brand-2)}
+  :root[data-theme="dark"] .t-brand,:root:not([data-theme="light"]) .t-brand{color:var(--brand)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .t-brand{color:var(--brand)}}
+  .t-ai{background:var(--ai-soft);color:var(--ai)}
+  .t-gold{background:var(--gold-soft);color:var(--gold)}
+  .t-coral{background:var(--coral-soft);color:var(--coral)}
+
+  /* the bet */
+  .betgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.betgrid{grid-template-columns:1fr}}
+  .movefrom{display:flex;flex-direction:column;gap:10px}
+  .quote{font-size:20px;font-weight:700;letter-spacing:-.01em;padding:14px 16px;border-radius:12px}
+  .q-bad{background:var(--coral-soft);color:var(--ink);border:1px solid color-mix(in srgb,var(--coral) 30%,transparent)}
+  .q-good{background:var(--brand-soft);color:var(--ink);border:1px solid color-mix(in srgb,var(--brand) 34%,transparent)}
+  .arrow-down{align-self:center;color:var(--ink-3);font-size:22px}
+
+  /* loop diagram */
+  .loop{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:stretch}
+  @media(max-width:820px){.loop{grid-template-columns:1fr 1fr}}
+  .loopstep{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;position:relative;box-shadow:var(--shadow)}
+  .loopstep .n{font-family:var(--mono);font-size:12px;color:var(--brand-2);font-weight:700}
+  :root[data-theme="dark"] .loopstep .n,:root:not([data-theme="light"]) .loopstep .n{color:var(--brand)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .loopstep .n{color:var(--brand)}}
+  .loopstep h4{font-size:15px;margin-top:6px;font-weight:750}
+  .loopstep p{font-size:13px;color:var(--ink-2);margin-top:5px}
+
+  /* challenge type chips */
+  .chtypes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+  @media(max-width:820px){.chtypes{grid-template-columns:1fr}}
+  .cht{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--surface-2)}
+  .cht h4{font-size:14.5px;font-weight:750;display:flex;gap:8px;align-items:center}
+  .cht p{font-size:13px;color:var(--ink-2);margin-top:6px}
+  .dot{width:9px;height:9px;border-radius:3px;flex:none}
+
+  /* skill tree */
+  .tree{display:flex;flex-direction:column;gap:0;position:relative;max-width:640px;margin:0 auto}
+  .unit{display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:start;padding:14px 0;position:relative}
+  .unit .node{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:22px;font-weight:800;
+    color:#fff;box-shadow:var(--shadow);z-index:2}
+  .unit:not(:last-child)::before{content:"";position:absolute;left:25px;top:52px;bottom:-14px;width:3px;background:var(--line-2);z-index:1}
+  .unit .body h4{font-size:16px;font-weight:750}
+  .unit .body p{font-size:13.5px;color:var(--ink-2);margin-top:3px}
+  .unit .body .skills{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .skill{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2)}
+  .u-locked .node{background:var(--surface-3);color:var(--ink-3);box-shadow:none}
+  .u-locked .body h4{color:var(--ink-2)}
+
+  /* wireframe phones row */
+  .frames{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media(max-width:900px){.frames{grid-template-columns:1fr;max-width:320px;margin:0 auto}}
+  .framecap{text-align:center;margin-top:14px}
+  .framecap b{font-size:14.5px;font-weight:750}
+  .framecap span{display:block;font-size:12.5px;color:var(--ink-2);margin-top:2px}
+
+  /* mini UI atoms inside phone screens */
+  .bar{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:12px}
+  .stat{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;font-family:var(--mono)}
+  .streak{color:var(--gold)} .hearts{color:var(--coral)} .gems{color:var(--ai)}
+  .progressbar{height:8px;border-radius:100px;background:var(--surface-3);overflow:hidden;flex:1}
+  .progressbar i{display:block;height:100%;border-radius:100px;background:var(--brand)}
+  .qbuilder{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px}
+  .qline{font-family:var(--mono);font-size:12.5px;line-height:1.9}
+  .kw{color:var(--ai);font-weight:700}
+  .slot{display:inline-block;min-width:44px;text-align:center;border-bottom:2px dashed var(--brand);color:var(--brand-2);font-weight:700;padding:0 4px}
+  :root[data-theme="dark"] .slot,:root:not([data-theme="light"]) .slot{color:var(--brand)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .slot{color:var(--brand)}}
+  .tokens{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .token{font-family:var(--mono);font-size:12px;font-weight:700;padding:5px 10px;border-radius:9px;
+    background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink);box-shadow:0 2px 0 var(--line-2)}
+  .restable{width:100%;border-collapse:collapse;margin-top:10px;font-family:var(--mono);font-size:11px}
+  .restable th{background:var(--surface-3);text-align:left;padding:4px 7px;color:var(--ink-2);font-weight:700}
+  .restable td{padding:4px 7px;border-top:1px solid var(--line)}
+  .cta-btn{margin-top:12px;width:100%;padding:11px;border-radius:12px;border:none;background:var(--brand);color:#04231a;
+    font-weight:800;font-size:13px;box-shadow:0 3px 0 var(--brand-2);font-family:var(--sans)}
+  :root[data-theme="dark"] .cta-btn,:root:not([data-theme="light"]) .cta-btn{color:#04231a}
+  .aichip{display:flex;gap:8px;align-items:flex-start;background:var(--ai-soft);border:1px solid color-mix(in srgb,var(--ai) 30%,transparent);
+    border-radius:12px;padding:10px;margin-top:10px;font-size:11.5px;color:var(--ink)}
+  .aichip .mascot{width:22px;height:22px;border-radius:7px;background:var(--ai);color:#fff;display:grid;place-items:center;flex:none;font-size:12px}
+
+  /* login mock */
+  .field{background:var(--surface);border:1px solid var(--line-2);border-radius:10px;padding:9px 11px;font-size:12px;color:var(--ink-3);margin-top:8px;font-family:var(--mono)}
+  .segment{display:flex;background:var(--surface-3);border-radius:10px;padding:3px;gap:3px;margin-bottom:6px}
+  .segment div{flex:1;text-align:center;font-size:11.5px;font-weight:700;padding:6px;border-radius:8px;color:var(--ink-2)}
+  .segment div.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+  /* flows */
+  .flow{display:flex;flex-direction:column;gap:22px}
+  .flowlane{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+  .flowlane .lane-h{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .flowlane .lane-h .badge{font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 9px;border-radius:7px}
+  .steps{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap}
+  .step{flex:1;min-width:120px;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:10px 12px;position:relative}
+  .step .st{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.05em}
+  .step h5{font-size:13px;font-weight:700;margin:3px 0 0}
+  .step p{font-size:11.5px;color:var(--ink-2);margin-top:3px}
+  .step.gate{border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:var(--gold-soft)}
+  .step.ai{border-color:color-mix(in srgb,var(--ai) 40%,transparent);background:var(--ai-soft)}
+  .arrows{display:flex;align-items:center;color:var(--ink-3);font-weight:800;padding:0 2px}
+  @media(max-width:820px){.arrows{display:none}}
+
+  /* RBAC table */
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+  table.rbac{width:100%;border-collapse:collapse;font-size:13.5px;min-width:720px}
+  table.rbac th,table.rbac td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line)}
+  table.rbac thead th{background:var(--surface-2);font-size:12px;font-family:var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--ink-2);position:sticky;top:0}
+  table.rbac tbody td:first-child{font-weight:600}
+  table.rbac td.c{text-align:center;font-weight:800}
+  .yes{color:var(--brand-2)} .no{color:var(--ink-3);opacity:.5} .own{color:var(--gold)}
+  :root[data-theme="dark"] .yes,:root:not([data-theme="light"]) .yes{color:var(--brand)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .yes{color:var(--brand)}}
+  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+  @media(max-width:820px){.roles{grid-template-columns:1fr}}
+  .role{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--surface)}
+  .role h4{font-size:14.5px;display:flex;gap:8px;align-items:center}
+  .role p{font-size:12.5px;color:var(--ink-2);margin-top:5px}
+
+  /* MVP in/out */
+  .scope{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.scope{grid-template-columns:1fr}}
+  .scopecol{border-radius:14px;padding:20px;border:1px solid var(--line)}
+  .scopecol.in{background:var(--brand-soft);border-color:color-mix(in srgb,var(--brand) 30%,transparent)}
+  .scopecol.out{background:var(--surface-2)}
+  .scopecol h3{font-size:16px;display:flex;gap:8px;align-items:center}
+  .scopelist{list-style:none;padding:0;margin:12px 0 0;display:flex;flex-direction:column;gap:9px}
+  .scopelist li{font-size:14px;display:flex;gap:9px;align-items:flex-start;color:var(--ink)}
+  .scopelist .mk{font-family:var(--mono);font-weight:800;flex:none}
+  .in .mk{color:var(--brand-2)} .out .mk{color:var(--ink-3)}
+  :root[data-theme="dark"] .in .mk,:root:not([data-theme="light"]) .in .mk{color:var(--brand)}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .in .mk{color:var(--brand)}}
+
+  /* metrics */
+  .northstar{background:linear-gradient(150deg,var(--brand),var(--brand-2));color:#fff;border-radius:16px;padding:26px;box-shadow:var(--shadow-lg);margin-bottom:18px}
+  .northstar .eyebrow{color:rgba(255,255,255,.85)}
+  .northstar h3{font-size:clamp(20px,3vw,28px);font-weight:800;margin-top:8px;letter-spacing:-.02em}
+  .northstar p{color:rgba(255,255,255,.9);margin-top:8px;font-size:15px;max-width:60ch}
+  .funnel{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:820px){.funnel{grid-template-columns:1fr 1fr}}
+  .metric{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--surface)}
+  .metric .lbl{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+  .metric .val{font-size:22px;font-weight:820;margin-top:6px;letter-spacing:-.02em}
+  .metric .desc{font-size:12.5px;color:var(--ink-2);margin-top:4px}
+
+  footer{padding:40px 0 60px;border-top:1px solid var(--line);color:var(--ink-3);font-size:13px}
+  .footgrid{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+
+  .lead-note{font-size:13px;color:var(--ink-3);font-family:var(--mono);margin-top:6px}
+</style>
+
+<nav class="nav">
+  <div class="wrap row">
+    <div class="brand"><span class="logo">🦫</span> Querly</div>
+    <div class="navlinks">
+      <a href="#bet">The bet</a>
+      <a href="#loop">The loop</a>
+      <a href="#curriculum">Curriculum</a>
+      <a href="#wireframes">Wireframes</a>
+      <a href="#flows">Flows</a>
+      <a href="#auth">Auth</a>
+      <a href="#rbac">RBAC</a>
+      <a href="#mvp">MVP</a>
+      <a href="#metrics">Metrics</a>
+    </div>
+    <button class="toggle" id="themeBtn" aria-label="Toggle theme">◐</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap grid">
+    <div>
+      <span class="eyebrow">Product Blueprint · v0.1</span>
+      <h1>Make teenagers <em>fluent in data</em> before the world asks them to be.</h1>
+      <p class="lede">Querly is a Duolingo-style app that turns SQL, databases and AI into a daily 4-minute habit — real queries, instant answers, streaks that stick.</p>
+      <div class="pill-row">
+        <span class="pill">🎯 <b>Class 9–12</b></span>
+        <span class="pill">🗄️ SQL · Databases · <b>AI</b></span>
+        <span class="pill">🔁 <b>Habit-first</b>, not course-first</span>
+        <span class="pill">📱 Shippable web PWA</span>
+      </div>
+      <p class="lead-note">// Built to ship, get real students in, and learn from feedback fast.</p>
+    </div>
+    <div>
+      <div class="phone" aria-hidden="true">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="bar">
+            <span class="stat streak">🔥 12</span>
+            <div class="progressbar"><i style="width:62%"></i></div>
+            <span class="stat hearts">❤ 4</span>
+          </div>
+          <div class="kicker" style="margin-bottom:4px">Unit 3 · Lesson 5</div>
+          <h4 style="font-size:15px;font-weight:750">Find the top scorer</h4>
+          <div class="qbuilder">
+            <div class="qline"><span class="kw">SELECT</span> name, score<br>
+            <span class="kw">FROM</span> students<br>
+            <span class="kw">ORDER BY</span> <span class="slot">?</span> <span class="kw">DESC</span><br>
+            <span class="kw">LIMIT</span> <span class="slot">1</span>;</div>
+            <div class="tokens">
+              <span class="token">score</span>
+              <span class="token">name</span>
+              <span class="token">grade</span>
+            </div>
+          </div>
+          <div class="aichip">
+            <span class="mascot">🦫</span>
+            <span><b>Bit:</b> “DESC means highest first — so which column decides the ranking?”</span>
+          </div>
+          <button class="cta-btn">Check answer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- THE BET -->
+<section id="bet">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">01 · The bet</span>
+      <h2>No pain today. Maximum leverage for tomorrow.</h2>
+      <p>A 15-year-old isn't job-hunting — so we don't sell them a job skill. We sell a <b>game they win daily</b>, and the by-product is that data stops being scary. They're the cheapest users to reach (school, parents, peers), the stickiest to form a habit in, and the highest lifetime value once they grow into it.</p>
+    </div>
+
+    <div class="betgrid">
+      <div class="card">
+        <span class="kicker">Who + why them</span>
+        <h3 style="margin-top:8px">The learner</h3>
+        <p><b>Students in class 9–12 (14–18).</b> Curious, phone-native, competitive, allergic to boredom. School teaches <i>about</i> computers but never lets them <i>command</i> data. They have time and neuroplasticity — the two things adult learners lack.</p>
+        <div class="skills" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">
+          <span class="skill">habit-forming</span><span class="skill">peer-driven</span><span class="skill">reward-motivated</span><span class="skill">short attention</span>
+        </div>
+      </div>
+      <div class="card movefrom">
+        <span class="kicker">The shift we sell</span>
+        <div class="quote q-bad">“Databases are boring adult stuff I'll never use.”</div>
+        <div class="arrow-down">↓</div>
+        <div class="quote q-good">“I can ask any dataset a question and get the answer myself.”</div>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top:16px">
+      <div class="card">
+        <span class="tag t-coral">Core problem</span>
+        <p style="margin-top:12px">Data literacy is the single most transferable tech skill — and the one thing <b>no school and no coding-toy teaches</b>. Existing SQL tools are dry docs for adults with a deadline. Nothing is built for a bored teenager with 4 spare minutes.</p>
+      </div>
+      <div class="card">
+        <span class="tag t-brand">Why SQL is perfect to gamify</span>
+        <p style="margin-top:12px">Every query has <b>one verifiable answer</b> you can check in milliseconds. Query = asking a question. That's the exact prompt→attempt→instant-feedback loop Duolingo is built on — SQL fits it better than languages do.</p>
+      </div>
+      <div class="card">
+        <span class="tag t-ai">Why now / why AI</span>
+        <p style="margin-top:12px">AI can be an infinitely patient tutor, an infinite puzzle generator, and the bridge from <b>plain English → SQL</b>. We don't bolt AI on — it's how we personalise, explain, and let kids <b>build</b> something real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE LOOP -->
+<section id="loop">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">02 · The core loop</span>
+      <h2>One loop, run daily, on a real database.</h2>
+      <p>Everything else is scaffolding around this 4-minute cycle. Queries run against a real in-browser SQLite engine — the student sees the <b>actual result table</b>, not a “correct ✓”. Truth, instantly.</p>
+    </div>
+
+    <div class="loop">
+      <div class="loopstep"><div class="n">01</div><h4>Prompt</h4><p>A tiny real-world task: “List students who scored above 90.”</p></div>
+      <div class="loopstep"><div class="n">02</div><h4>Attempt</h4><p>Tap-to-build blocks, fix a bug, or type raw SQL — difficulty scales with skill.</p></div>
+      <div class="loopstep"><div class="n">03</div><h4>Run for real</h4><p>Query executes on live SQLite. The actual output table appears.</p></div>
+      <div class="loopstep"><div class="n">04</div><h4>Feedback</h4><p>Right → XP + streak. Wrong → AI tutor explains <i>why</i>, gives a hint, never the answer.</p></div>
+      <div class="loopstep"><div class="n">05</div><h4>Reward &amp; hook</h4><p>Streak flame, gems, league bump, “come back tomorrow.”</p></div>
+    </div>
+
+    <h3 style="font-size:17px;font-weight:750;margin:30px 0 0">Six challenge formats keep the loop fresh</h3>
+    <div class="chtypes">
+      <div class="cht"><h4><span class="dot" style="background:var(--brand)"></span>Build the query</h4><p>Drag SELECT / FROM / WHERE blocks into the right order. Zero typing — pure concept.</p></div>
+      <div class="cht"><h4><span class="dot" style="background:var(--brand)"></span>Predict the output</h4><p>See a query + table, pick the result rows. Trains reading before writing.</p></div>
+      <div class="cht"><h4><span class="dot" style="background:var(--coral)"></span>Fix the bug</h4><p>A broken query returns wrong rows. Spot and repair it. Debugging = deep learning.</p></div>
+      <div class="cht"><h4><span class="dot" style="background:var(--brand)"></span>Free query</h4><p>Type raw SQL against a live DB, auto-graded on the result set. The real skill.</p></div>
+      <div class="cht"><h4><span class="dot" style="background:var(--gold)"></span>Data detective</h4><p>A mystery scenario solved only by querying. Story wrapper = intrinsic motivation.</p></div>
+      <div class="cht"><h4><span class="dot" style="background:var(--ai)"></span>Ask in English</h4><p>Type a question, AI shows the SQL. Learn the English→query mapping — the AI skill.</p></div>
+    </div>
+
+    <div class="grid-3" style="margin-top:16px">
+      <div class="card"><span class="tag t-gold">Retention mechanics</span><p style="margin-top:12px"><b>Streaks, hearts (lives), gems, XP, weekly leagues,</b> and a <b>daily SQL puzzle</b> (“guess the query from the output”, Wordle-style). Loss aversion + variable reward + social rank.</p></div>
+      <div class="card"><span class="tag t-brand">Boss levels</span><p style="margin-top:12px">Each unit ends in a mini-project: <b>“Design the school library database and answer 5 real questions.”</b> Proof they can <i>build</i>, not just answer.</p></div>
+      <div class="card"><span class="tag t-ai">Bit, the AI tutor</span><p style="margin-top:12px">Our beaver mascot. Explains mistakes in plain language, adapts difficulty, and generates endless practice at the student's exact level. Hints, never answers.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRICULUM -->
+<section id="curriculum">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">03 · Curriculum</span>
+      <h2>A skill tree from “what is a row?” to “build with AI.”</h2>
+      <p>Ten units, each unlocking the next — visible progress is the reward. First three units are the MVP; students reach a genuinely useful skill (aggregations) inside week one.</p>
+    </div>
+
+    <div class="tree">
+      <div class="unit"><div class="node" style="background:linear-gradient(150deg,var(--brand),var(--brand-2))">1</div>
+        <div class="body"><h4>What is data?</h4><p>Rows, columns, tables — framed with things they know: playlists, contacts, scores.</p>
+        <div class="skills"><span class="skill">table</span><span class="skill">row</span><span class="skill">column</span></div></div></div>
+      <div class="unit"><div class="node" style="background:linear-gradient(150deg,var(--brand),var(--brand-2))">2</div>
+        <div class="body"><h4>SELECT basics <span class="tag t-brand">MVP</span></h4><p>Ask a table for exactly the columns you want.</p>
+        <div class="skills"><span class="skill">SELECT</span><span class="skill">FROM</span><span class="skill">*</span><span class="skill">AS</span></div></div></div>
+      <div class="unit"><div class="node" style="background:linear-gradient(150deg,var(--brand),var(--brand-2))">3</div>
+        <div class="body"><h4>Filtering <span class="tag t-brand">MVP</span></h4><p>WHERE, comparisons, AND/OR, LIKE, IN — asking sharper questions.</p>
+        <div class="skills"><span class="skill">WHERE</span><span class="skill">AND</span><span class="skill">LIKE</span><span class="skill">IN</span></div></div></div>
+      <div class="unit"><div class="node" style="background:linear-gradient(150deg,var(--brand),var(--brand-2))">4</div>
+        <div class="body"><h4>Sort &amp; limit <span class="tag t-brand">MVP</span></h4><p>ORDER BY, LIMIT — top-N, leaderboards, “the highest / latest.”</p>
+        <div class="skills"><span class="skill">ORDER BY</span><span class="skill">DESC</span><span class="skill">LIMIT</span></div></div></div>
+      <div class="unit u-locked"><div class="node">5</div>
+        <div class="body"><h4>Aggregations 🔒</h4><p>COUNT, SUM, AVG, GROUP BY — turning rows into insight.</p>
+        <div class="skills"><span class="skill">COUNT</span><span class="skill">GROUP BY</span><span class="skill">HAVING</span></div></div></div>
+      <div class="unit u-locked"><div class="node">6</div>
+        <div class="body"><h4>Relationships &amp; JOINs 🔒</h4><p>Keys and JOINs — connecting two tables, the “aha” of databases.</p>
+        <div class="skills"><span class="skill">PRIMARY KEY</span><span class="skill">JOIN</span><span class="skill">FK</span></div></div></div>
+      <div class="unit u-locked"><div class="node">7</div>
+        <div class="body"><h4>Changing data 🔒</h4><p>INSERT, UPDATE, DELETE — safely, in a sandbox.</p>
+        <div class="skills"><span class="skill">INSERT</span><span class="skill">UPDATE</span><span class="skill">DELETE</span></div></div></div>
+      <div class="unit u-locked"><div class="node">8</div>
+        <div class="body"><h4>Designing a database 🔒</h4><p>Schema, data types, normalization basics — think like a builder.</p>
+        <div class="skills"><span class="skill">schema</span><span class="skill">types</span><span class="skill">normalize</span></div></div></div>
+      <div class="unit u-locked"><div class="node" style="background:linear-gradient(150deg,var(--ai),#3b5bdb)">9</div>
+        <div class="body"><h4>Data + AI 🔒</h4><p>How AI reads data, English→SQL, an intuition for embeddings &amp; “similar rows.”</p>
+        <div class="skills"><span class="skill">NL→SQL</span><span class="skill">prompt</span><span class="skill">embeddings</span></div></div></div>
+      <div class="unit u-locked"><div class="node" style="background:linear-gradient(150deg,var(--gold),#e8590c)">★</div>
+        <div class="body"><h4>Capstone: Build with AI 🔒</h4><p>Describe an app idea in English → AI scaffolds its database → the student writes the queries that make it work. They ship something real.</p>
+        <div class="skills"><span class="skill">build</span><span class="skill">AI-assisted</span><span class="skill">portfolio</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WIREFRAMES -->
+<section id="wireframes">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">04 · Wireframes</span>
+      <h2>The screens that carry the product.</h2>
+      <p>Mid-fidelity, mobile-first. Three student-facing hero screens below; parent &amp; auth screens follow in their own sections.</p>
+    </div>
+
+    <div class="frames">
+      <!-- Skill tree / home -->
+      <div>
+        <div class="phone"><div class="notch"></div><div class="screen">
+          <div class="bar">
+            <span class="stat streak">🔥 12</span>
+            <span class="stat gems">💎 340</span>
+            <span class="stat hearts">❤ 5</span>
+          </div>
+          <div class="kicker" style="margin-bottom:8px">Your path · Unit 3</div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="display:flex;gap:10px;align-items:center"><span style="width:38px;height:38px;border-radius:12px;background:var(--brand);display:grid;place-items:center;color:#fff;font-weight:800">✓</span><div style="flex:1"><div style="font-size:12px;font-weight:700">SELECT basics</div><div class="progressbar" style="margin-top:4px"><i style="width:100%"></i></div></div></div>
+            <div style="display:flex;gap:10px;align-items:center"><span style="width:38px;height:38px;border-radius:12px;background:var(--brand);display:grid;place-items:center;color:#fff;font-weight:800">✓</span><div style="flex:1"><div style="font-size:12px;font-weight:700">Filtering</div><div class="progressbar" style="margin-top:4px"><i style="width:100%"></i></div></div></div>
+            <div style="display:flex;gap:10px;align-items:center"><span style="width:38px;height:38px;border-radius:12px;background:var(--gold);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 0 0 4px var(--gold-soft)">▶</span><div style="flex:1"><div style="font-size:12px;font-weight:700">Sort &amp; limit</div><div class="progressbar" style="margin-top:4px"><i style="width:62%"></i></div></div></div>
+            <div style="display:flex;gap:10px;align-items:center;opacity:.5"><span style="width:38px;height:38px;border-radius:12px;background:var(--surface-3);display:grid;place-items:center">🔒</span><div style="flex:1"><div style="font-size:12px;font-weight:700">Aggregations</div></div></div>
+          </div>
+          <div class="aichip"><span class="mascot">🦫</span><span><b>Daily puzzle ready.</b> Guess today's query for +50 💎</span></div>
+        </div></div>
+        <div class="framecap"><b>Home · Skill tree</b><span>Visible progress is the reward loop</span></div>
+      </div>
+
+      <!-- Lesson -->
+      <div>
+        <div class="phone"><div class="notch"></div><div class="screen">
+          <div class="bar">
+            <span style="font-size:14px">✕</span>
+            <div class="progressbar"><i style="width:40%"></i></div>
+            <span class="stat hearts">❤ 4</span>
+          </div>
+          <div class="kicker">Fix the bug</div>
+          <h4 style="font-size:14px;font-weight:750;margin-top:4px">Only 90+ scorers should show — this query is wrong.</h4>
+          <div class="qbuilder">
+            <div class="qline"><span class="kw">SELECT</span> name <span class="kw">FROM</span> students<br>
+            <span class="kw">WHERE</span> score <span class="slot" style="border-color:var(--coral);color:var(--coral)">&lt;</span> 90;</div>
+          </div>
+          <table class="restable">
+            <thead><tr><th>name</th><th>score</th></tr></thead>
+            <tbody><tr><td>Aarav</td><td>72</td></tr><tr><td>Diya</td><td>68</td></tr></tbody>
+          </table>
+          <div class="aichip"><span class="mascot">🦫</span><span><b>Bit:</b> These are the <i>low</i> scorers. Which way should the arrow point?</span></div>
+          <button class="cta-btn">Run query</button>
+        </div></div>
+        <div class="framecap"><b>Lesson · Challenge</b><span>Real SQLite result table, live AI hint</span></div>
+      </div>
+
+      <!-- Parent dashboard -->
+      <div>
+        <div class="phone"><div class="notch"></div><div class="screen">
+          <div class="bar"><span style="font-size:12px;font-weight:800">👋 Aarav's week</span><span class="tag t-brand">Parent</span></div>
+          <div class="grid-2" style="gap:8px">
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px"><div class="metric"><div class="val" style="font-size:20px">🔥 12</div><div class="desc" style="font-size:11px">day streak</div></div></div>
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px"><div class="metric"><div class="val" style="font-size:20px">86 min</div><div class="desc" style="font-size:11px">this week</div></div></div>
+          </div>
+          <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--ink-2)">Skills mastered</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+            <span class="skill">SELECT</span><span class="skill">WHERE</span><span class="skill">ORDER BY</span>
+          </div>
+          <div class="aichip" style="background:var(--brand-soft);border-color:color-mix(in srgb,var(--brand) 30%,transparent)"><span class="mascot" style="background:var(--brand)">📈</span><span><b>Weekly report:</b> Aarav is in the top 20% for consistency. Next up: Aggregations.</span></div>
+          <button class="cta-btn" style="background:var(--surface);color:var(--ink);box-shadow:0 3px 0 var(--line-2);border:1px solid var(--line-2)">View full report</button>
+        </div></div>
+        <div class="framecap"><b>Parent · Dashboard</b><span>Read-only. Progress, time, weekly digest</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USER FLOWS -->
+<section id="flows">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">05 · User flows</span>
+      <h2>Three flows that matter for launch.</h2>
+      <p>The <span class="tag t-gold" style="vertical-align:middle">gold</span> steps are consent gates (India's DPDP Act &amp; global norms: under-18 needs verifiable parental consent). <span class="tag t-ai" style="vertical-align:middle">AI</span> steps are where the model does the heavy lifting.</p>
+    </div>
+
+    <div class="flow">
+      <div class="flowlane">
+        <div class="lane-h"><span class="badge t-brand">Student onboarding</span><span style="font-size:12.5px;color:var(--ink-2)">First-run → first “aha” in under 3 minutes</span></div>
+        <div class="steps">
+          <div class="step"><div class="st">START</div><h5>Land / invite</h5><p>App link or peer/parent invite</p></div>
+          <div class="arrows">→</div>
+          <div class="step"><div class="st">GOAL</div><h5>Pick a goal</h5><p>“Casual” → “Serious.” Sets daily target</p></div>
+          <div class="arrows">→</div>
+          <div class="step gate"><div class="st">GATE</div><h5>Age check</h5><p>Under 18 → request parent email</p></div>
+          <div class="arrows">→</div>
+          <div class="step ai"><div class="st">AI</div><h5>Placement</h5><p>3-Q quiz; AI sets start level</p></div>
+          <div class="arrows">→</div>
+          <div class="step"><div class="st">AHA</div><h5>First lesson</h5><p>Run a real query, win, streak = 1</p></div>
+        </div>
+      </div>
+
+      <div class="flowlane">
+        <div class="lane-h"><span class="badge t-gold">Daily habit loop</span><span style="font-size:12.5px;color:var(--ink-2)">The engine of retention</span></div>
+        <div class="steps">
+          <div class="step"><div class="st">NUDGE</div><h5>Reminder</h5><p>Push at chosen time · “protect your 🔥”</p></div>
+          <div class="arrows">→</div>
+          <div class="step"><div class="st">DO</div><h5>Daily quest</h5><p>5–8 challenges, ~4 min</p></div>
+          <div class="arrows">→</div>
+          <div class="step ai"><div class="st">AI</div><h5>Adapt</h5><p>Miss → tutor + easier next item</p></div>
+          <div class="arrows">→</div>
+          <div class="step"><div class="st">REWARD</div><h5>Streak + league</h5><p>XP, gems, weekly rank move</p></div>
+          <div class="arrows">→</div>
+          <div class="step"><div class="st">LOOP</div><h5>Tomorrow hook</h5><p>“Next unlocks in 1 lesson”</p></div>
+        </div>
+      </div>
+
+      <div class="flowlane">
+        <div class="lane-h"><span class="badge t-ai">Parent onboarding &amp; consent</span><span style="font-size:12.5px;color:var(--ink-2)">Triggered by student age-gate or direct signup</span></div>
+        <div class="steps">
+          <div class="step"><div class="st">TRIGGER</div><h5>Consent email</h5><p>“Aarav wants to learn on Querly”</p></div>
+          <div class="arrows">→</div>
+          <div class="step gate"><div class="st">GATE</div><h5>Verify &amp; consent</h5><p>Confirm identity, approve terms</p></div>
+          <div class="arrows">→</div>
+          <div class="step"><div class="st">LINK</div><h5>Link child</h5><p>Account paired, read-only access</p></div>
+          <div class="arrows">→</div>
+          <div class="step"><div class="st">MONITOR</div><h5>Dashboard</h5><p>Progress, time, weekly digest</p></div>
+          <div class="arrows">→</div>
+          <div class="step"><div class="st">LATER</div><h5>Upgrade</h5><p>Optional family plan / billing</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTH -->
+<section id="auth">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">06 · Auth &amp; onboarding screens</span>
+      <h2>Separate front doors for students and parents.</h2>
+      <p>Same account graph, different entry and permissions. Students get a low-friction, minimal-data signup; parents get a verification-first flow. No passwords for young students where possible — magic link or school SSO.</p>
+    </div>
+
+    <div class="grid-3">
+      <!-- Student login -->
+      <div>
+        <div class="phone"><div class="notch"></div><div class="screen">
+          <div style="text-align:center;margin:10px 0 14px"><span class="logo" style="width:44px;height:44px;font-size:24px;margin:0 auto">🦫</span><div style="font-weight:800;font-size:16px;margin-top:8px">Welcome to Querly</div><div style="font-size:11.5px;color:var(--ink-2)">Learn data. Win daily.</div></div>
+          <div class="segment"><div class="on">Student</div><div>Parent</div></div>
+          <div class="field">First name</div>
+          <div class="field">Email or phone</div>
+          <div class="field">Age</div>
+          <button class="cta-btn">Create my account →</button>
+          <div style="text-align:center;font-size:11px;color:var(--ink-3);margin-top:10px">or continue with</div>
+          <div style="display:flex;gap:6px;margin-top:6px"><div class="field" style="flex:1;text-align:center;margin-top:0">Google</div><div class="field" style="flex:1;text-align:center;margin-top:0">School SSO</div></div>
+        </div></div>
+        <div class="framecap"><b>Student sign-up</b><span>Minimal data · magic link or SSO</span></div>
+      </div>
+
+      <!-- Age gate / consent trigger -->
+      <div>
+        <div class="phone"><div class="notch"></div><div class="screen">
+          <div style="text-align:center;margin:22px 0 12px;font-size:34px">🛡️</div>
+          <h4 style="font-size:15px;font-weight:800;text-align:center">One quick step</h4>
+          <p style="font-size:12px;color:var(--ink-2);text-align:center;margin-top:8px">Since you're under 18, a parent or guardian needs to approve your account. It keeps you safe and is the law.</p>
+          <div class="field">Parent's email</div>
+          <button class="cta-btn">Send approval request</button>
+          <div class="aichip" style="margin-top:14px"><span class="mascot">🦫</span><span>Meanwhile, try a free demo lesson — no account needed!</span></div>
+          <div style="text-align:center;font-size:11px;color:var(--ink-3);margin-top:12px">DPDP Act · verifiable parental consent</div>
+        </div></div>
+        <div class="framecap"><b>Age gate → consent</b><span>Under-18 branch of onboarding</span></div>
+      </div>
+
+      <!-- Parent login -->
+      <div>
+        <div class="phone"><div class="notch"></div><div class="screen">
+          <div style="text-align:center;margin:10px 0 14px"><span class="logo" style="width:44px;height:44px;font-size:24px;margin:0 auto;background:linear-gradient(150deg,var(--ai),#3b5bdb)">👪</span><div style="font-weight:800;font-size:16px;margin-top:8px">Parent access</div><div style="font-size:11.5px;color:var(--ink-2)">Approve &amp; follow your child's progress</div></div>
+          <div class="segment"><div>Student</div><div class="on">Parent</div></div>
+          <div class="field">Email</div>
+          <div class="field">Password</div>
+          <button class="cta-btn" style="background:var(--ai);box-shadow:0 3px 0 #3b5bdb;color:#fff">Log in</button>
+          <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:12px;font-size:11px;color:var(--ink-2)"><b>Linked child</b><br>Aarav · Class 10 · <span class="yes">active</span></div>
+          <div style="text-align:center;font-size:11px;color:var(--ink-3);margin-top:10px">Verify with OTP for consent actions</div>
+        </div></div>
+        <div class="framecap"><b>Parent log-in</b><span>Verification-first · read-only by default</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RBAC -->
+<section id="rbac">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">07 · Access control (RBAC)</span>
+      <h2>Six roles. Least privilege by default.</h2>
+      <p>A minor's account is the most sensitive object in the system, so permissions are deliberately narrow. Parents observe but never act as the child; teachers assign but can't see personal data; content authors touch lessons, never users.</p>
+    </div>
+
+    <div class="roles">
+      <div class="role"><h4><span class="dot" style="background:var(--brand)"></span>Student</h4><p>Owns their learning. Plays lessons, sees own progress. No access to anyone else's data. The default account.</p></div>
+      <div class="role"><h4><span class="dot" style="background:var(--ai)"></span>Parent / Guardian</h4><p>Grants consent, views <i>their linked child's</i> progress &amp; time, manages billing. Read-only on learning.</p></div>
+      <div class="role"><h4><span class="dot" style="background:var(--gold)"></span>Teacher</h4><p>Creates classes, assigns units, sees aggregate class progress. No access to PII or parent data.</p></div>
+      <div class="role"><h4><span class="dot" style="background:var(--coral)"></span>School Admin</h4><p>Manages teachers &amp; rosters within their org. Scoped to one school; can't touch content or platform.</p></div>
+      <div class="role"><h4><span class="dot" style="background:var(--ink-2)"></span>Content Author</h4><p>Builds &amp; edits lessons, puzzles, curriculum. Zero access to any user account or data.</p></div>
+      <div class="role"><h4><span class="dot" style="background:var(--ink)"></span>Super Admin</h4><p>Platform operations, support, safety. Access is logged &amp; audited; break-glass for user data.</p></div>
+    </div>
+
+    <div class="tablewrap">
+      <table class="rbac">
+        <thead>
+          <tr><th>Capability</th><th>Student</th><th>Parent</th><th>Teacher</th><th>Sch. Admin</th><th>Author</th><th>Super</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Play lessons / earn XP</td><td class="c yes">●</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c own">◐</td></tr>
+          <tr><td>View own progress</td><td class="c yes">●</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c yes">●</td></tr>
+          <tr><td>View a child's progress</td><td class="c no">—</td><td class="c own">◐ linked</td><td class="c own">◐ class</td><td class="c no">—</td><td class="c no">—</td><td class="c yes">●</td></tr>
+          <tr><td>Grant / revoke consent</td><td class="c no">—</td><td class="c yes">●</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c yes">●</td></tr>
+          <tr><td>Manage billing</td><td class="c no">—</td><td class="c yes">●</td><td class="c no">—</td><td class="c own">◐ org</td><td class="c no">—</td><td class="c yes">●</td></tr>
+          <tr><td>Create class &amp; assign work</td><td class="c no">—</td><td class="c no">—</td><td class="c yes">●</td><td class="c yes">●</td><td class="c no">—</td><td class="c yes">●</td></tr>
+          <tr><td>Manage teachers / roster</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c own">◐ org</td><td class="c no">—</td><td class="c yes">●</td></tr>
+          <tr><td>Create / edit lessons</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c yes">●</td><td class="c yes">●</td></tr>
+          <tr><td>Access PII / all users</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c no">—</td><td class="c own">◐ audited</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px;font-family:var(--mono)">● full &nbsp;·&nbsp; ◐ scoped / conditional &nbsp;·&nbsp; — none</p>
+  </div>
+</section>
+
+<!-- MVP -->
+<section id="mvp">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">08 · MVP scope</span>
+      <h2>What ships in v1 — and what deliberately doesn't.</h2>
+      <p>The bar for v1: a student can sign up, a parent can consent, and the student can form a <b>3-day streak</b> learning real SQL with an AI tutor. One platform (responsive web PWA), three units, ruthless cuts everywhere else.</p>
+    </div>
+
+    <div class="scope">
+      <div class="scopecol in">
+        <h3><span>✅</span> In the MVP</h3>
+        <ul class="scopelist">
+          <li><span class="mk">›</span><span><b>Responsive web PWA</b> — installable, works on any school laptop or phone. Fastest path to real users.</span></li>
+          <li><span class="mk">›</span><span><b>Units 1–4</b> (~15 lessons): data basics → SELECT → WHERE → ORDER BY/LIMIT.</span></li>
+          <li><span class="mk">›</span><span><b>Live SQLite in-browser</b> (sql.js) — real query execution, real result tables.</span></li>
+          <li><span class="mk">›</span><span><b>4 challenge types:</b> build-the-query, predict-output, fix-the-bug, free-query.</span></li>
+          <li><span class="mk">›</span><span><b>AI tutor “Bit”</b> — error explanations &amp; hints via LLM API.</span></li>
+          <li><span class="mk">›</span><span><b>“Ask in English” playground</b> — the NL→SQL wow moment.</span></li>
+          <li><span class="mk">›</span><span><b>Streaks, XP, hearts, 1 daily puzzle</b> — the minimum viable habit loop.</span></li>
+          <li><span class="mk">›</span><span><b>Student auth + parent consent + read-only parent dashboard.</b></span></li>
+          <li><span class="mk">›</span><span><b>Basic admin</b> to publish lessons &amp; watch funnels.</span></li>
+        </ul>
+      </div>
+      <div class="scopecol out">
+        <h3><span>🔜</span> Deliberately later</h3>
+        <ul class="scopelist">
+          <li><span class="mk">×</span><span>Native iOS/Android apps (PWA covers v1 feedback).</span></li>
+          <li><span class="mk">×</span><span>Leagues, friends, multiplayer “Query Race.”</span></li>
+          <li><span class="mk">×</span><span>Units 5–10 incl. JOINs, DB design, AI capstone.</span></li>
+          <li><span class="mk">×</span><span>Full teacher classroom tools &amp; assignments.</span></li>
+          <li><span class="mk">×</span><span>Payments / family &amp; school plans.</span></li>
+          <li><span class="mk">×</span><span>AI-generated infinite personalized levels.</span></li>
+          <li><span class="mk">×</span><span>Offline mode, localization.</span></li>
+        </ul>
+        <p style="font-size:12.5px;color:var(--ink-2);margin-top:14px">Each of these earns its way in <b>only after</b> the core loop proves it retains students.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<section id="metrics">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">09 · Is it working?</span>
+      <h2>Measure the habit and the learning — not vanity.</h2>
+      <p>Downloads mean nothing. We win only if students keep coming back <i>and</i> can actually query better than last week.</p>
+    </div>
+
+    <div class="northstar">
+      <span class="eyebrow">★ North-star metric</span>
+      <h3>Weekly Active Learners completing ≥ 3 lessons/week</h3>
+      <p>It fuses both truths in one number: they showed up (habit) and they did the work (learning). Everything else is an input to moving this.</p>
+    </div>
+
+    <div class="funnel">
+      <div class="metric"><div class="lbl">Activation</div><div class="val">&gt; 60%</div><div class="desc">finish first lesson (the “aha”)</div></div>
+      <div class="metric"><div class="lbl">Habit · D7</div><div class="val">&gt; 25%</div><div class="desc">return &amp; hold a 3-day streak</div></div>
+      <div class="metric"><div class="lbl">Learning gain</div><div class="val">+2 lvls</div><div class="desc">placement → retest in 3 weeks</div></div>
+      <div class="metric"><div class="lbl">AI value</div><div class="val">&gt; 50%</div><div class="desc">hint → correct next attempt</div></div>
+    </div>
+
+    <div class="grid-3" style="margin-top:16px">
+      <div class="card"><span class="tag t-brand">Engagement</span><p style="margin-top:12px">DAU/MAU ratio, lessons per active day, median session 4–6 min, streak distribution. Watch where quests get abandoned.</p></div>
+      <div class="card"><span class="tag t-gold">Learning quality</span><p style="margin-top:12px">First-try query success rate rising over time, unit completion, boss-level pass rate. Are they getting genuinely better?</p></div>
+      <div class="card"><span class="tag t-ai">Qualitative feedback</span><p style="margin-top:12px">In-app “was this helpful?” per lesson, weekly student &amp; parent interviews, NPS. Ship → watch → talk → cut → repeat.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footgrid">
+    <div><div class="brand" style="font-size:16px"><span class="logo" style="width:26px;height:26px;font-size:15px">🦫</span> Querly</div><p style="margin-top:8px;max-width:44ch">Product blueprint for a gamified SQL · databases · AI app for class 9–12. Working name — everything here is a decision, not a suggestion.</p></div>
+    <div style="text-align:right;font-family:var(--mono);font-size:12px">v0.1 · design blueprint<br>next → build the MVP loop</div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var btn=document.getElementById('themeBtn');
+    var root=document.documentElement;
+    function current(){
+      if(root.getAttribute('data-theme')) return root.getAttribute('data-theme');
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light';
+    }
+    btn.addEventListener('click',function(){
+      var next = current()==='dark' ? 'light':'dark';
+      root.setAttribute('data-theme',next);
+    });
+  })();
+</script>
