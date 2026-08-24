@@ -1,6 +1,6 @@
 # 🦫 Querly
 
-A **Duolingo-style app that teaches SQL, databases and AI to students in class 9–12** through games, puzzles and quizzes. Real queries run in the browser against a live SQLite engine; a light Neon-backed backend stores users, progress and streaks.
+A **app that teaches SQL, databases and AI to students in class 9–12** through games, puzzles and quizzes. Real queries run in the browser against a live SQLite engine; a light Neon-backed backend stores users, progress and streaks.
 
 - **Basic → medium** content only, delivered as puzzles (build-the-query, fix-the-bug, predict-the-output, free query, quizzes).
 - **Bit**, an AI tutor, gives hints (never the answer) — powered by an LLM when a key is set, otherwise curated hints.
