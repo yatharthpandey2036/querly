@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { getProgressFor } from "@/lib/gamification";
 import { CURRICULUM, ALL_LESSONS } from "@/content/curriculum";
+import { projectForUnit } from "@/content/projects";
 import TopBar from "@/components/TopBar";
 
 export const dynamic = "force-dynamic";
@@ -97,6 +98,42 @@ export default async function LearnPage() {
                   </div>
                 );
               })}
+              {(() => {
+                const project = projectForUnit(unit.id);
+                if (!project) return null;
+                const unitDone = unit.lessons.every((l) => doneSet.has(l.id));
+                const projDone = doneSet.has(project.id);
+                const locked = !unitDone && !projDone;
+                const inner = (
+                  <div className="lesson-row project-row">
+                    <div
+                      className="node"
+                      style={{
+                        background: locked ? "var(--surface-3)" : "var(--dark)",
+                        color: locked ? "var(--ink-3)" : "var(--lime)",
+                      }}
+                    >
+                      {projDone ? "✓" : locked ? "🔒" : "★"}
+                    </div>
+                    <div className="lesson-meta">
+                      <h4>🚀 Project · {project.title}</h4>
+                      <p>{project.tagline}</p>
+                    </div>
+                    <div>
+                      {projDone ? (
+                        <span className="tag t-brand">shipped</span>
+                      ) : !locked ? (
+                        <span className="tag t-gold">build</span>
+                      ) : null}
+                    </div>
+                  </div>
+                );
+                return locked ? (
+                  <div style={{ opacity: 0.6 }}>{inner}</div>
+                ) : (
+                  <Link href={`/project/${project.id}`}>{inner}</Link>
+                );
+              })()}
             </div>
           ))}
         </div>
