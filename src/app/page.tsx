@@ -13,8 +13,8 @@ export default async function Landing() {
       <nav className="topbar">
         <div className="wrap row">
           <div className="brand">
-            <span className="logo">B</span>
-            <span className="wordmark">Bitlab</span>
+            <span className="logo">L</span>
+            <span className="wordmark">Learnly</span>
           </div>
           <div className="stats-row">
             <ThemeToggle />
@@ -33,18 +33,18 @@ export default async function Landing() {
       <section className="hero-split">
         <div className="hero-left">
           <span className="eyebrow" style={{ color: "var(--on-lime)" }}>
-            Learn AI · SQL · Data
+            AI · Data · Real-world skills
           </span>
           <h1 style={{ marginTop: 18 }}>
-            Get smart with&nbsp;AI &amp; data.
+            Get fluent in the language of&nbsp;tech.
           </h1>
           <p style={{ fontSize: 19, maxWidth: "34ch", marginTop: 18, fontWeight: 500 }}>
-            Pick a track, play games, and build real apps — with Bit, your AI sidekick.
+            Pick a track, play games, and build real projects — with Bit, your sidekick. Start young, stay ahead.
           </p>
           <div className="pill-row">
             <span className="pill">Games &amp; puzzles</span>
-            <span className="pill">Build real apps</span>
-            <span className="pill">Streaks &amp; XP</span>
+            <span className="pill">AI &amp; data tracks</span>
+            <span className="pill">Build real projects</span>
           </div>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 30 }}>
             <Link className="btn btn-dark" href={primaryHref}>
@@ -56,16 +56,30 @@ export default async function Landing() {
           </div>
         </div>
         <div className="hero-right">
-          <div className="codepanel">
-            <span className="c-dim">-- ask the data anything</span>
-            <br />
-            <span className="c-kw">SELECT</span> name, streak
-            <br />
-            <span className="c-kw">FROM</span> learners
-            <br />
-            <span className="c-kw">WHERE</span> fluent = <span className="c-str">true</span>
-            <br />
-            <span className="c-kw">ORDER BY</span> streak <span className="c-kw">DESC</span>;
+          <div className="hero-menu">
+            <div className="hm-title mono">▶ pick your track</div>
+            <div className="hm-tracks">
+              <div className="hm-track">
+                <span className="hm-ic">🤖</span>
+                <b>AI</b>
+                <small>how it learns &amp; thinks</small>
+              </div>
+              <div className="hm-track">
+                <span className="hm-ic">🗄️</span>
+                <b>Data &amp; SQL</b>
+                <small>ask data anything</small>
+              </div>
+            </div>
+            <div className="hm-acts">
+              <span className="hm-act">🎮 play</span>
+              <span className="hm-act">🧩 puzzles</span>
+              <span className="hm-act">🚀 build</span>
+            </div>
+            <div className="hm-foot mono">
+              <span>🔥 streak</span>
+              <span>⭐ xp</span>
+              <span>💎 gems</span>
+            </div>
           </div>
         </div>
       </section>
@@ -83,8 +97,8 @@ export default async function Landing() {
               <div className="l">runs in the browser</div>
             </div>
             <div className="bigstat">
-              <div className="n">Real SQL</div>
-              <div className="l">on a live database</div>
+              <div className="n">2 tracks</div>
+              <div className="l">AI &amp; data</div>
             </div>
             <div className="bigstat">
               <div className="n">0</div>
@@ -132,8 +146,8 @@ export default async function Landing() {
       <footer className="band band-dark">
         <div className="band-inner on-dark spread" style={{ paddingTop: 32, paddingBottom: 32, flexWrap: "wrap" }}>
           <div className="brand">
-            <span className="logo">B</span>
-            <span className="wordmark">Bitlab</span>
+            <span className="logo">L</span>
+            <span className="wordmark">Learnly</span>
           </div>
           <span className="small" style={{ color: "#8a978f" }}>Learn AI &amp; data by playing.</span>
         </div>

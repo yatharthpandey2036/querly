@@ -30,8 +30,8 @@ export default function TopBar({
     <nav className="topbar">
       <div className="wrap row">
         <Link className="brand" href="/learn">
-          <span className="logo">B</span>
-          <span className="wordmark">Bitlab</span>
+          <span className="logo">L</span>
+          <span className="wordmark">Learnly</span>
         </Link>
         <div className="stats-row">
           {stats && (

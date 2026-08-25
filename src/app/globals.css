@@ -436,3 +436,16 @@ textarea.sql:focus { outline: 2px solid var(--lime); border-color: var(--ink); }
 /* real-life project cards */
 .life-why { background: var(--surface-2); border-left: 3px solid var(--lime); padding: 9px 12px; font-size: 13px; color: var(--ink); }
 a.card:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+/* generic hero "pick a track" panel */
+.hero-menu { width: 100%; max-width: 400px; border: 1px solid var(--dark-2); background: #0b1713; padding: 24px; color: var(--on-dark); }
+.hm-title { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); }
+.hm-tracks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.hm-track { border: 1px solid var(--dark-2); padding: 16px 14px; background: rgba(255,255,255,0.03); transition: border-color 0.15s ease; }
+.hm-track:hover { border-color: var(--lime); }
+.hm-track .hm-ic { font-size: 26px; }
+.hm-track b { display: block; font-size: 16px; margin-top: 8px; }
+.hm-track small { display: block; font-size: 11.5px; color: #9fb0aa; margin-top: 2px; }
+.hm-acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.hm-act { font-size: 12.5px; font-weight: 700; padding: 6px 11px; border: 1px solid var(--lime); color: var(--lime); }
+.hm-foot { display: flex; gap: 16px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--dark-2); font-size: 12.5px; color: #9fb0aa; }

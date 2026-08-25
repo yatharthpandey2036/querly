@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Bitlab — AI track. Easy -> medium, gamified, NO code required.
+// Learnly — AI track. Easy -> medium, gamified, NO code required.
 // Same shape as the SQL track: animated explainer + interactive games/quizzes.
 // AI lessons use only non-SQL challenge types (match / tap / order / choice / predict).
 // ---------------------------------------------------------------------------
