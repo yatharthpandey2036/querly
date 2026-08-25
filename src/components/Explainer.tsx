@@ -46,12 +46,13 @@ export default function Explainer({
   };
 
   const overall = ((i + Math.min(p, 1)) / scenes.length) * 100;
+  const theme = data.theme ?? "sql";
 
   return (
     <div className="explainer">
       <div className="exp-frame">
         <div className="exp-tag">▶ Intro · {title}</div>
-        <AnimStage anim={scene.anim} sceneKey={i} />
+        <AnimStage anim={scene.anim} sceneKey={i} theme={theme} />
         <div className="exp-bit">
           <span className="bit">🦫</span>
           <div className="exp-caption" key={i}>
@@ -98,8 +99,23 @@ export default function Explainer({
   );
 }
 
-// A small animated table that reacts to the scene's `anim` type.
-function AnimStage({ anim, sceneKey }: { anim?: string; sceneKey: number }) {
+// A small animated stage that reacts to the scene's `anim` type.
+function AnimStage({ anim, sceneKey, theme }: { anim?: string; sceneKey: number; theme: string }) {
+  if (theme === "ai") {
+    return (
+      <div className={`ai-stage aiA-${anim || "talk"}`} key={`${anim}-${sceneKey}`}>
+        <div className="ai-ex">
+          <span className="ai-chip">🖼️</span>
+          <span className="ai-chip">💬</span>
+          <span className="ai-chip">🔢</span>
+        </div>
+        <span className="ai-arrow">→</span>
+        <div className="ai-brain">🧠</div>
+        <span className="ai-arrow">→</span>
+        <div className="ai-out">guess ✨</div>
+      </div>
+    );
+  }
   const rows = [
     { n: "Aarav", s: 92 },
     { n: "Diya", s: 68 },

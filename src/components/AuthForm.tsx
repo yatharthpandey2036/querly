@@ -147,7 +147,7 @@ export default function AuthForm({
       </form>
 
       <p className="center small muted mt16">
-        {mode === "signup" ? "Already have an account?" : "New to Querly?"}{" "}
+        {mode === "signup" ? "Already have an account?" : "New to Bitlab?"}{" "}
         <button
           type="button"
           onClick={() => {

@@ -100,6 +100,65 @@ export const LESSON_NOTES: Record<string, LessonNotes> = {
     example: { sql: "SELECT title FROM movies WHERE title LIKE 'R%';", does: "movies whose name starts with R" },
     remember: "% = anything. IN = a shortlist.",
   },
+
+  // --- AI track ---
+  au1l1: {
+    summary: "AI is a computer that learns from examples and makes smart guesses.",
+    points: [
+      "AI looks at lots of examples and finds patterns.",
+      "Then it makes a smart guess about something new.",
+      "It can be wrong — it's guessing, not magic.",
+    ],
+    remember: "AI = learns patterns, then guesses.",
+  },
+  au1l2: {
+    summary: "Data means the examples AI learns from.",
+    points: ["Data can be photos, text, or numbers.", "More good data makes AI smarter.", "Bad or messy data makes worse guesses."],
+    remember: "Good data in → good guesses out.",
+  },
+  au1l3: {
+    summary: "AI first TRAINS (learns), then PREDICTS (guesses).",
+    points: [
+      "Training = studying examples to find patterns.",
+      "Predicting = guessing about something new.",
+      "It can only guess about things like it trained on.",
+    ],
+    remember: "Train first, then predict.",
+  },
+  au2l1: {
+    summary: "AI recognises things by patterns it learned from many examples.",
+    points: ["It saw many examples and learned their patterns.", "New thing? It checks for those patterns.", "Match found → it gives that label."],
+    remember: "AI matches new things to learned patterns.",
+  },
+  au2l2: {
+    summary: "AI is only as good as its examples.",
+    points: ["Clean, varied data → good guesses.", "Messy or narrow data → bad guesses.", "People say: garbage in, garbage out."],
+    remember: "Pick clean, varied data.",
+  },
+  au2l3: {
+    summary: "AI copies patterns in its data — even unfair ones.",
+    points: ["One-sided data makes unfair guesses.", "That unfairness is called bias.", "Fix it with varied, fair examples."],
+    remember: "Unfair data → biased AI. Use fair data.",
+  },
+  au3l1: {
+    summary: "A prompt is the instruction you give an AI.",
+    points: ["It's what you type or ask the AI to do.", "A clear prompt gets a better answer.", "A vague prompt gets a confused answer."],
+    remember: "Prompt = your instruction to AI.",
+  },
+  au3l2: {
+    summary: "Good prompts are clear and specific.",
+    points: [
+      "Say exactly what you want.",
+      "Say who it's for and how long or what style.",
+      "'poem' is weak; 'a 3-line poem about the sea' is strong.",
+    ],
+    remember: "Clear + specific = great answers.",
+  },
+  au3l3: {
+    summary: "Build a prompt from pieces: action, the thing, the topic, the style.",
+    points: ["Start with an action word: Write, Explain, List.", "Add the thing and the topic.", "Add a style like 'in simple words'."],
+    remember: "Action → thing → topic → style.",
+  },
 };
 
 export function getNotes(id: string): LessonNotes | undefined {

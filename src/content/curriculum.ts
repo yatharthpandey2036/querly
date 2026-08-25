@@ -38,11 +38,13 @@ export interface Challenge {
 /** One beat of the animated explainer. */
 export interface ExplainerScene {
   text: string;
-  /** Which canned animation to show. */
-  anim?: "talk" | "rows" | "columns" | "star" | "filter" | "sort";
+  /** Which canned animation to show (SQL stage: rows/columns/filter/sort; AI stage: data/learn/think/guess). */
+  anim?: "talk" | "rows" | "columns" | "star" | "filter" | "sort" | "data" | "learn" | "think" | "guess";
 }
 export interface Explainer {
   scenes: ExplainerScene[];
+  /** Which visual world the animated stage should use. Defaults to "sql". */
+  theme?: "sql" | "ai";
 }
 
 export interface Lesson {
@@ -52,8 +54,9 @@ export interface Lesson {
   subtitle: string;
   concept: string;
   explainer?: Explainer;
-  datasetSql: string;
-  tables: string[];
+  /** SQL lessons only. AI lessons have no dataset. */
+  datasetSql?: string;
+  tables?: string[];
   challenges: Challenge[];
 }
 

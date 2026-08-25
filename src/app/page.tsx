@@ -12,8 +12,8 @@ export default async function Landing() {
       <nav className="topbar">
         <div className="wrap row">
           <div className="brand">
-            <span className="logo">Q</span>
-            <span className="wordmark">Querly</span>
+            <span className="logo">B</span>
+            <span className="wordmark">Bitlab</span>
           </div>
           <div className="stats-row">
             <Link className="btn btn-ghost" href={session ? primaryHref : "/login"} style={{ padding: "10px 18px" }}>
@@ -27,17 +27,17 @@ export default async function Landing() {
       <section className="hero-split">
         <div className="hero-left">
           <span className="eyebrow" style={{ color: "var(--on-lime)" }}>
-            SQL · Databases · AI
+            Learn AI · SQL · Data
           </span>
           <h1 style={{ marginTop: 18 }}>
-            Get fluent in&nbsp;data.
+            Get smart with&nbsp;AI &amp; data.
           </h1>
-          <p style={{ fontSize: 19, maxWidth: "32ch", marginTop: 18, fontWeight: 500 }}>
-            Databases as a daily game. Real queries, instant answers, streaks that stick.
+          <p style={{ fontSize: 19, maxWidth: "34ch", marginTop: 18, fontWeight: 500 }}>
+            Pick a track, play games, and build real apps — with Bit, your AI sidekick.
           </p>
           <div className="pill-row">
             <span className="pill">Games &amp; puzzles</span>
-            <span className="pill">AI tutor</span>
+            <span className="pill">Build real apps</span>
             <span className="pill">Streaks &amp; XP</span>
           </div>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 30 }}>
@@ -95,7 +95,7 @@ export default async function Landing() {
           <div className="featbox">
             <span className="idx">01</span>
             <h3>Play</h3>
-            <p>Build queries from blocks, fix broken ones, crack data mysteries — every step is a puzzle.</p>
+            <p>Tap, match, sort and build — every concept is a game or puzzle, never a lecture.</p>
           </div>
           <div className="featbox">
             <span className="idx">02</span>
@@ -126,10 +126,10 @@ export default async function Landing() {
       <footer className="band band-dark">
         <div className="band-inner on-dark spread" style={{ paddingTop: 32, paddingBottom: 32, flexWrap: "wrap" }}>
           <div className="brand">
-            <span className="logo">Q</span>
-            <span className="wordmark">Querly</span>
+            <span className="logo">B</span>
+            <span className="wordmark">Bitlab</span>
           </div>
-          <span className="small" style={{ color: "#8a978f" }}>Learn data by playing.</span>
+          <span className="small" style={{ color: "#8a978f" }}>Learn AI &amp; data by playing.</span>
         </div>
       </footer>
     </>

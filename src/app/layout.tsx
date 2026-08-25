@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Querly",
-  description: "Learn SQL, databases and AI by playing. Real queries, instant feedback, streaks that stick.",
+  title: "Bitlab",
+  description: "Learn AI and SQL by playing. Pick your track, play games, build real apps with Bit.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

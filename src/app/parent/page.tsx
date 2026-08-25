@@ -3,7 +3,7 @@ import { eq, inArray } from "drizzle-orm";
 import { db } from "@/db";
 import { getSession } from "@/lib/session";
 import { parentLinks, users, userStats, progress } from "@/db/schema";
-import { ALL_LESSONS } from "@/content/curriculum";
+import { ALL_LESSONS } from "@/content/tracks";
 import TopBar from "@/components/TopBar";
 
 export const dynamic = "force-dynamic";

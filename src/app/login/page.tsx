@@ -12,9 +12,9 @@ export default function LoginPage({
       <div className="center" style={{ marginBottom: 24 }}>
         <div className="brand" style={{ justifyContent: "center", fontSize: 24, color: "var(--ink)" }}>
           <span className="logo" style={{ width: 38, height: 38, fontSize: 22 }}>
-            Q
+            B
           </span>
-          <span className="wordmark">Querly</span>
+          <span className="wordmark">Bitlab</span>
         </div>
       </div>
       <AuthForm initialRole={initialRole} initialMode={initialMode} />

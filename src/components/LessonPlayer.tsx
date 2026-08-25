@@ -16,11 +16,14 @@ export default function LessonPlayer({
   lesson,
   nextId,
   userName,
+  track = "sql",
 }: {
   lesson: Lesson;
   nextId: string | null;
   userName: string;
+  track?: string;
 }) {
+  const learnHref = `/learn?track=${track}`;
   const router = useRouter();
   const challenges = lesson.challenges;
   const totalXp = useMemo(() => challenges.reduce((n, c) => n + c.xp, 0), [challenges]);
@@ -70,8 +73,9 @@ export default function LessonPlayer({
     setHint(null);
   }, [idx, challenge]);
 
-  // load a preview of the first dataset table
+  // load a preview of the first dataset table (SQL lessons only)
   useEffect(() => {
+    if (!lesson.datasetSql || !lesson.tables?.length) return;
     let active = true;
     previewTable(lesson.datasetSql, lesson.tables[0]).then((r) => {
       if (active) setPreview(r);
@@ -97,7 +101,7 @@ export default function LessonPlayer({
         correct = !!challenge.options?.[selected]?.correct;
       } else {
         const query = challenge.type === "build" ? placed.join(" ") : sql;
-        const g = await gradeQuery(lesson.datasetSql, query, challenge.solutionSql ?? "");
+        const g = await gradeQuery(lesson.datasetSql ?? "", query, challenge.solutionSql ?? "");
         setResult(g.result.error ? g.result : g.result);
         correct = g.correct;
       }
@@ -185,14 +189,14 @@ export default function LessonPlayer({
               Next lesson →
             </Link>
           ) : (
-            <Link className="btn btn-primary" href="/learn">
+            <Link className="btn btn-primary" href={learnHref}>
               Back to path
             </Link>
           )}
           <Link className="btn btn-ghost" href={`/lesson/${lesson.id}/notes`}>
             📄 Notes
           </Link>
-          <Link className="btn btn-ghost" href="/learn">
+          <Link className="btn btn-ghost" href={learnHref}>
             My path
           </Link>
         </div>
@@ -205,7 +209,7 @@ export default function LessonPlayer({
     return (
       <div className="lesson-shell">
         <div className="lesson-top">
-          <Link href="/learn" style={{ fontSize: 20, color: "var(--ink-2)" }} aria-label="Close">
+          <Link href={learnHref} style={{ fontSize: 20, color: "var(--ink-2)" }} aria-label="Close">
             ✕
           </Link>
           <span className="mono small muted">{lesson.title}</span>
@@ -218,7 +222,7 @@ export default function LessonPlayer({
   return (
     <div className="lesson-shell">
       <div className="lesson-top">
-        <Link href="/learn" style={{ fontSize: 20, color: "var(--ink-2)" }} aria-label="Close">
+        <Link href={learnHref} style={{ fontSize: 20, color: "var(--ink-2)" }} aria-label="Close">
           ✕
         </Link>
         <div className="progressbar">
@@ -260,7 +264,7 @@ export default function LessonPlayer({
       <h3 className="prompt-q">{challenge.prompt}</h3>
 
       {/* data preview toggle (SQL challenges only) */}
-      {!isGame && (
+      {!isGame && lesson.tables?.length ? (
         <>
           <button
             className="btn btn-ghost small"
@@ -272,7 +276,7 @@ export default function LessonPlayer({
           </button>
           {showData && preview && <ResultTable result={preview} />}
         </>
-      )}
+      ) : null}
 
       {/* ---- interactive games ---- */}
       {challenge.type === "tap" && challenge.rows && (

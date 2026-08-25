@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import { recordCompletion } from "@/lib/gamification";
-import { getLesson } from "@/content/curriculum";
+import { getLesson } from "@/content/tracks";
 
 export async function POST(req: Request) {
   const session = await getSession();

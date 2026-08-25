@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getLesson, getUnit } from "@/content/curriculum";
+import { getLesson, getUnit } from "@/content/tracks";
 import { getNotes } from "@/content/notes";
 import NotesActions from "@/components/NotesActions";
 
@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 function buildText(title: string, unit: string, n: ReturnType<typeof getNotes>): string {
   if (!n) return "";
   const lines: string[] = [];
-  lines.push(`QUERLY NOTES — ${title}`);
+  lines.push(`BITLAB NOTES — ${title}`);
   lines.push(unit);
   lines.push("");
   lines.push(n.summary);
@@ -38,7 +38,7 @@ export default function NotesPage({ params }: { params: { id: string } }) {
   if (!lesson || !notes) notFound();
 
   const unit = getUnit(lesson.unitId);
-  const unitLabel = unit ? `Unit ${unit.index} · ${unit.title}` : "Querly";
+  const unitLabel = unit ? `Unit ${unit.index} · ${unit.title}` : "Bitlab";
   const text = buildText(lesson.title, unitLabel, notes);
 
   return (
@@ -48,7 +48,7 @@ export default function NotesPage({ params }: { params: { id: string } }) {
         <Link className="btn btn-ghost" href={`/lesson/${lesson.id}`} style={{ padding: "8px 14px" }}>
           ← Back to lesson
         </Link>
-        <NotesActions text={text} filename={`querly-${lesson.id}-notes.txt`} />
+        <NotesActions text={text} filename={`bitlab-${lesson.id}-notes.txt`} />
       </div>
 
       {/* the sheet */}
@@ -56,9 +56,9 @@ export default function NotesPage({ params }: { params: { id: string } }) {
         <header className="notes-head">
           <div className="brand" style={{ color: "var(--ink)", fontSize: 18 }}>
             <span className="logo" style={{ width: 26, height: 26, fontSize: 15 }}>
-              Q
+              B
             </span>
-            <span className="wordmark">Querly</span>
+            <span className="wordmark">Bitlab</span>
             <span className="mono small muted" style={{ marginLeft: 8 }}>
               revision notes
             </span>
@@ -110,7 +110,7 @@ export default function NotesPage({ params }: { params: { id: string } }) {
           <strong>Remember:</strong> {notes.remember}
         </div>
 
-        <footer className="notes-foot mono small">querly · learn data by playing</footer>
+        <footer className="notes-foot mono small">bitlab · learn ai &amp; data by playing</footer>
       </article>
     </div>
   );
