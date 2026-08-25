@@ -256,6 +256,8 @@ export default function LessonPlayer({
         </span>
       </div>
 
+      <div className="lesson-grid">
+        <div className="lesson-main">
       {idx === 0 && <div className="concept">💡 {lesson.concept}</div>}
 
       <div className="mono small muted" style={{ marginBottom: 4 }}>
@@ -420,7 +422,14 @@ export default function LessonPlayer({
         )}
       </div>
 
-      <Mascots track={track} />
+        </div>
+        <aside className="lesson-side">
+          <div className="card pad buddy-card">
+            <span className="eyebrow">Your buddies</span>
+            <Mascots track={track} />
+          </div>
+        </aside>
+      </div>
 
       {toast && <div className="toast">⭐ {toast}</div>}
     </div>
