@@ -136,6 +136,7 @@ export default function LessonPlayer({
 
   async function askBit() {
     if (!challenge) return;
+    trackEvent("AI Hint Requested", { lessonId: lesson.id, challengeId: challenge.id, track });
     setHintLoading(true);
     try {
       const query = challenge.type === "build" ? placed.join(" ") : sql;

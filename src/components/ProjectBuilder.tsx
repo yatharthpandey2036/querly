@@ -60,6 +60,7 @@ export default function ProjectBuilder({
   }
 
   async function askBit() {
+    track("AI Hint Requested", { projectId: project.id, missionId: mission.id });
     setHintLoading(true);
     try {
       const res = await fetch("/api/tutor", {
