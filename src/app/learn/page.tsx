@@ -5,6 +5,7 @@ import { getProgressFor } from "@/lib/gamification";
 import { TRACKS, getTrack, curriculumFor } from "@/content/tracks";
 import { projectForUnit } from "@/content/projects";
 import { aiProjectForUnit } from "@/content/ai-projects";
+import { getUserPlan } from "@/lib/premium";
 import TopBar from "@/components/TopBar";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +23,7 @@ export default async function LearnPage({ searchParams }: { searchParams: { trac
 
   const { stats, completedLessonIds } = await getProgressFor(session.id);
   const doneSet = new Set(completedLessonIds);
+  const plan = await getUserPlan(session.id);
 
   const order = curriculum.flatMap((u) => u.lessons.map((l) => l.id));
   const currentIndex = order.findIndex((id) => !doneSet.has(id));
@@ -188,6 +190,20 @@ export default async function LearnPage({ searchParams }: { searchParams: { trac
               <h4 style={{ fontSize: 16, marginTop: 8 }}>Use it in real life →</h4>
               <p className="muted small mt8">Short, no-pressure projects: pocket money, watchlists, scam-spotting…</p>
             </Link>
+
+            {plan === "free" ? (
+              <Link className="card pad" href="/premium" style={{ display: "block", borderColor: "var(--gold)" }}>
+                <span className="eyebrow" style={{ color: "var(--gold)" }}>🏆 Go Premium</span>
+                <h4 style={{ fontSize: 16, marginTop: 8 }}>Leagues, friends &amp; races</h4>
+                <p className="muted small mt8">Learning is free — unlock the competition for ₹170/mo.</p>
+              </Link>
+            ) : (
+              <Link className="card pad" href="/social" style={{ display: "block" }}>
+                <span className="eyebrow">🏆 Compete</span>
+                <h4 style={{ fontSize: 16, marginTop: 8 }}>Leagues, friends &amp; races →</h4>
+                <p className="muted small mt8">See your rank and challenge friends.</p>
+              </Link>
+            )}
 
             <div className="card pad">
               <span className="eyebrow">Your tracks</span>

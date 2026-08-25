@@ -19,6 +19,7 @@ export type Role =
   | "super_admin";
 
 export type ConsentStatus = "not_required" | "pending" | "granted";
+export type Plan = "free" | "premium" | "family";
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -30,6 +31,37 @@ export const users = pgTable("users", {
   // For students under 18: consent lifecycle + the parent we invited.
   consentStatus: text("consent_status").$type<ConsentStatus>().notNull().default("not_required"),
   parentEmail: text("parent_email"),
+  // Subscription: free (learn AI+SQL) vs premium/family (leagues, friends, race).
+  plan: text("plan").$type<Plan>().notNull().default("free"),
+  planSince: timestamp("plan_since", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// Friends (one row per direction, so we insert both when two users connect).
+export const friendships = pgTable(
+  "friendships",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    friendUserId: uuid("friend_user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => ({
+    uniqPair: unique().on(t.userId, t.friendUserId),
+  }),
+);
+
+// Query Race results — the sprint leaderboard.
+export const raceScores = pgTable("race_scores", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  score: integer("score").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
