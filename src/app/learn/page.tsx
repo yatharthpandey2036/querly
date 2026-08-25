@@ -6,6 +6,7 @@ import { TRACKS, getTrack, curriculumFor } from "@/content/tracks";
 import { projectForUnit } from "@/content/projects";
 import { aiProjectForUnit } from "@/content/ai-projects";
 import { getUserPlan } from "@/lib/premium";
+import { studioAccess } from "@/lib/studio";
 import { lessonRequiresPremium, projectRequiresPremium } from "@/lib/access";
 import TopBar from "@/components/TopBar";
 
@@ -26,6 +27,7 @@ export default async function LearnPage({ searchParams }: { searchParams: { trac
   const doneSet = new Set(completedLessonIds);
   const plan = await getUserPlan(session.id);
   const premium = plan !== "free";
+  const studio = await studioAccess(session.id);
 
   const order = curriculum.flatMap((u) => u.lessons.map((l) => l.id));
   const currentIndex = order.findIndex((id) => !doneSet.has(id));
@@ -236,6 +238,18 @@ export default async function LearnPage({ searchParams }: { searchParams: { trac
                 <p className="muted small mt8">See your rank and challenge friends.</p>
               </Link>
             )}
+
+            <Link className="card pad" href="/studio" style={{ display: "block", borderColor: studio.unlocked ? "var(--lime)" : "var(--line)" }}>
+              <span className="eyebrow" style={studio.unlocked ? { color: "var(--brand-2)" } : undefined}>
+                {studio.unlocked ? "🎧 Studio · exclusive" : "🔒 Studio · exclusive"}
+              </span>
+              <h4 style={{ fontSize: 16, marginTop: 8 }}>{studio.unlocked ? "Build an AI DJ →" : "Unlock the Studio"}</h4>
+              <p className="muted small mt8">
+                {studio.unlocked
+                  ? "Your exclusive build-with-AI projects."
+                  : `Premium + ${studio.xpNeeded} XP + a friend (you: ${studio.xp} XP).`}
+              </p>
+            </Link>
 
             <div className="card pad">
               <span className="eyebrow">Your tracks</span>
