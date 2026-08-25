@@ -183,6 +183,12 @@ export default async function LearnPage({ searchParams }: { searchParams: { trac
               </div>
             </div>
 
+            <Link className="card pad" href={`/projects?track=${track}`} style={{ display: "block" }}>
+              <span className="eyebrow">🌍 Real life</span>
+              <h4 style={{ fontSize: 16, marginTop: 8 }}>Use it in real life →</h4>
+              <p className="muted small mt8">Short, no-pressure projects: pocket money, watchlists, scam-spotting…</p>
+            </Link>
+
             <div className="card pad">
               <span className="eyebrow">Your tracks</span>
               <div className="track-prog">
