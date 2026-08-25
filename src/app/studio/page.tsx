@@ -37,8 +37,8 @@ export default async function StudioPage() {
             ← Back
           </Link>
           <div className="card pad center" style={{ padding: 40 }}>
-            <div style={{ fontSize: 48 }}>🎧</div>
-            <h2 style={{ fontSize: 26, marginTop: 8 }}>The Studio</h2>
+            <div style={{ fontSize: 48 }}>🧪</div>
+            <h2 style={{ fontSize: 26, marginTop: 8 }}>Maker Lab</h2>
             <p className="muted mt8" style={{ maxWidth: "42ch", margin: "8px auto 0" }}>
               Our most exclusive build-with-AI projects. Unlock all three to enter:
             </p>
@@ -78,9 +78,9 @@ export default async function StudioPage() {
         <Link className="btn btn-ghost" href="/learn" style={{ padding: "8px 14px", marginBottom: 18 }}>
           ← Back
         </Link>
-        <span className="eyebrow">🎧 The Studio · exclusive</span>
+        <span className="eyebrow">🧪 Maker Lab · exclusive</span>
         <h2 style={{ fontSize: 28, marginTop: 6 }}>Build something amazing with AI ✨</h2>
-        <p className="muted mt8">You unlocked it — welcome in. Pick a project to build.</p>
+        <p className="muted mt8">You unlocked it — welcome to the Maker Lab. Pick a project to build.</p>
 
         <div className="grid-2 mt24">
           <Link className="card pad" href="/studio/ai-dj" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -102,7 +102,7 @@ export default async function StudioPage() {
               <h3 style={{ fontSize: 20 }}>🛒 AI Shopkeeper</h3>
               <span className="tag t-brand">soon</span>
             </div>
-            <p className="muted small">Build a store assistant that recommends products — more Studio projects are on the way.</p>
+            <p className="muted small">Build a store assistant that recommends products — more Maker Lab projects are on the way.</p>
           </div>
         </div>
       </main>

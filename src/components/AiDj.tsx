@@ -204,7 +204,7 @@ export default function AiDj() {
               </div>
               <div className="mt24" style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                 <Link className="btn btn-primary" href="/studio">
-                  Back to Studio →
+                  Back to Maker Lab →
                 </Link>
               </div>
             </div>

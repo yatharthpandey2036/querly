@@ -241,9 +241,9 @@ export default async function LearnPage({ searchParams }: { searchParams: { trac
 
             <Link className="card pad" href="/studio" style={{ display: "block", borderColor: studio.unlocked ? "var(--lime)" : "var(--line)" }}>
               <span className="eyebrow" style={studio.unlocked ? { color: "var(--brand-2)" } : undefined}>
-                {studio.unlocked ? "🎧 Studio · exclusive" : "🔒 Studio · exclusive"}
+                {studio.unlocked ? "🧪 Maker Lab · exclusive" : "🔒 Maker Lab · exclusive"}
               </span>
-              <h4 style={{ fontSize: 16, marginTop: 8 }}>{studio.unlocked ? "Build an AI DJ →" : "Unlock the Studio"}</h4>
+              <h4 style={{ fontSize: 16, marginTop: 8 }}>{studio.unlocked ? "Build an AI DJ →" : "Unlock the Maker Lab"}</h4>
               <p className="muted small mt8">
                 {studio.unlocked
                   ? "Your exclusive build-with-AI projects."
