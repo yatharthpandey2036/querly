@@ -4,7 +4,6 @@ import { getSession } from "@/lib/session";
 import { getProgressFor } from "@/lib/gamification";
 import { getUserPlan, PLANS } from "@/lib/premium";
 import TopBar from "@/components/TopBar";
-import SubscribeButton from "@/components/SubscribeButtons";
 import CancelButton from "@/components/CancelButton";
 
 export const dynamic = "force-dynamic";
@@ -67,7 +66,9 @@ export default async function PremiumPage() {
                       ))}
                     </ul>
                     <div style={{ marginTop: "auto", paddingTop: 8 }}>
-                      <SubscribeButton plan={key} />
+                      <Link className={`btn btn-block ${key === "family" ? "btn-dark" : "btn-primary"}`} href={`/premium/checkout?plan=${key}`}>
+                        Choose this plan
+                      </Link>
                     </div>
                   </div>
                 );
