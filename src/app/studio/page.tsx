@@ -31,12 +31,16 @@ export default async function StudioPage() {
     return (
       <>
         {topbar}
-        <main className="wrap" style={{ maxWidth: 620, paddingTop: 20, paddingBottom: 60 }}>
+        <main
+          className="wrap"
+          style={{ maxWidth: 640, minHeight: "calc(100vh - 64px)", display: "flex", flexDirection: "column", paddingTop: 20, paddingBottom: 40 }}
+        >
           <TrackOnMount event="Studio Locked Viewed" />
-          <Link className="btn btn-ghost" href="/learn" style={{ padding: "8px 14px", marginBottom: 18 }}>
+          <Link className="btn btn-ghost" href="/learn" style={{ padding: "8px 14px" }}>
             ← Back
           </Link>
-          <div className="card pad center" style={{ padding: 40 }}>
+          <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
+            <div className="card pad center" style={{ padding: 44, width: "100%" }}>
             <div style={{ fontSize: 48 }}>🧪</div>
             <h2 style={{ fontSize: 26, marginTop: 8 }}>Maker Lab</h2>
             <p className="muted mt8" style={{ maxWidth: "42ch", margin: "8px auto 0" }}>
@@ -63,6 +67,7 @@ export default async function StudioPage() {
                   Earn more XP →
                 </Link>
               )}
+            </div>
             </div>
           </div>
         </main>
