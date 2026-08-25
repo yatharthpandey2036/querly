@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { CapstoneProject } from "@/content/projects";
 import { gradeQuery, type QueryResult } from "@/lib/sqlEngine";
+import ThemeToggle from "@/components/ThemeToggle";
+import Mascots from "@/components/Mascots";
 
 export default function ProjectBuilder({
   project,
@@ -136,6 +138,7 @@ export default function ProjectBuilder({
         <div className="progressbar">
           <i style={{ width: `${progress}%` }} />
         </div>
+        <ThemeToggle />
         <span className="mono small muted">
           feature {idx + 1}/{missions.length}
         </span>
@@ -236,6 +239,8 @@ export default function ProjectBuilder({
           <div className="banner mt16">💡 {project.aiIdea}</div>
         </div>
       </div>
+
+      <Mascots track="sql" />
 
       {toast && <div className="toast">⭐ {toast}</div>}
     </div>

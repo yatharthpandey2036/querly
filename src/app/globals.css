@@ -235,7 +235,7 @@ a:hover > .lesson-row { border-color: var(--ink); position: relative; z-index: 1
 .lesson-meta p { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
 
 /* ---- lesson player ---- */
-.lesson-shell { max-width: 720px; margin: 0 auto; padding: 26px 28px 64px; }
+.lesson-shell { max-width: 900px; margin: 0 auto; padding: 22px 28px 48px; min-height: calc(100vh - 8px); display: flex; flex-direction: column; }
 .lesson-top { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
 .lesson-top .progressbar { flex: 1; }
 .concept { background: var(--panel); border-left: 4px solid var(--lime); padding: 15px 18px; font-size: 14.5px; margin-bottom: 20px; }
@@ -350,7 +350,7 @@ textarea.sql:focus { outline: 2px solid var(--lime); border-color: var(--ink); }
 }
 
 /* ---- capstone projects ---- */
-.project-shell { max-width: 980px; margin: 0 auto; padding: 26px 28px 64px; }
+.project-shell { max-width: 1280px; margin: 0 auto; padding: 22px 32px 48px; min-height: calc(100vh - 8px); display: flex; flex-direction: column; }
 .proj-head { margin-bottom: 22px; }
 .proj-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px; }
 @media (max-width: 860px) { .proj-grid { grid-template-columns: 1fr; } }
@@ -449,3 +449,20 @@ a.card:hover { border-color: var(--ink); transform: translateY(-2px); }
 .hm-acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
 .hm-act { font-size: 12.5px; font-weight: 700; padding: 6px 11px; border: 1px solid var(--lime); color: var(--lime); }
 .hm-foot { display: flex; gap: 16px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--dark-2); font-size: 12.5px; color: #9fb0aa; }
+
+/* ---- animated AI / database characters on learning screens ---- */
+.mascot-strip { margin-top: auto; display: flex; align-items: flex-end; justify-content: center; gap: 34px; padding: 40px 20px 8px; flex-wrap: wrap; }
+.mascot { position: relative; font-size: 42px; line-height: 1; filter: saturate(1.05); }
+.mascot .m-body { display: inline-block; }
+.mascot.thinking .m-body { animation: mSway 2.8s ease-in-out infinite; }
+.mascot.curious .m-body { animation: mBob 2.1s ease-in-out infinite; }
+.mascot.playing .m-body { animation: mHop 1.5s ease-in-out infinite; }
+.mascot .m-bubble { position: absolute; top: -14px; right: -12px; font-size: 19px; animation: mFloat 2.6s ease-in-out infinite; }
+.mascot-cap { width: 100%; text-align: center; font-size: 12px; color: var(--ink-3); margin-top: 12px; letter-spacing: 0.06em; }
+@keyframes mSway { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-7px) rotate(3deg); } }
+@keyframes mBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes mHop { 0%, 100% { transform: translateY(0); } 28% { transform: translateY(-13px); } 44% { transform: translateY(0); } 60% { transform: translateY(-5px); } }
+@keyframes mFloat { 0%, 100% { transform: translateY(0) scale(0.9); opacity: 0.35; } 50% { transform: translateY(-7px) scale(1); opacity: 1; } }
+
+/* theme toggle sitting on a light learning-screen top bar */
+.lesson-top .theme-toggle { border-color: var(--line-2); background: var(--surface-2); }

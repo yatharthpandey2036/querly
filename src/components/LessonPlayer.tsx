@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import type { Lesson } from "@/content/curriculum";
 import { gradeQuery, previewTable, type QueryResult } from "@/lib/sqlEngine";
 import Explainer from "@/components/Explainer";
+import ThemeToggle from "@/components/ThemeToggle";
+import Mascots from "@/components/Mascots";
 import TapGame from "@/components/games/TapGame";
 import OrderGame from "@/components/games/OrderGame";
 import MatchGame from "@/components/games/MatchGame";
@@ -213,6 +215,8 @@ export default function LessonPlayer({
             ✕
           </Link>
           <span className="mono small muted">{lesson.title}</span>
+          <span style={{ marginLeft: "auto" }} />
+          <ThemeToggle />
         </div>
         <Explainer data={lesson.explainer} title={lesson.title} onDone={() => setPhase("play")} />
       </div>
@@ -246,6 +250,7 @@ export default function LessonPlayer({
         >
           📄 notes
         </Link>
+        <ThemeToggle />
         <span className="mono small muted">
           {idx + 1}/{challenges.length}
         </span>
@@ -414,6 +419,8 @@ export default function LessonPlayer({
           </>
         )}
       </div>
+
+      <Mascots track={track} />
 
       {toast && <div className="toast">⭐ {toast}</div>}
     </div>
