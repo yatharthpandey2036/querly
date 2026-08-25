@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export interface Stats {
   streak: number;
@@ -35,7 +36,7 @@ export default function TopBar({
         <div className="stats-row">
           {stats && (
             <>
-              <span className="stat streak" title="Day streak">
+              <span className={`stat streak${stats.streak > 0 ? " hot" : ""}`} title="Day streak">
                 🔥 {stats.streak}
               </span>
               <span className="stat gems" title="Gems">
@@ -49,6 +50,7 @@ export default function TopBar({
               </span>
             </>
           )}
+          <ThemeToggle />
           <button
             className="btn"
             style={{

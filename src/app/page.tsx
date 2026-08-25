@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { homePathForRole } from "@/lib/rbac";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default async function Landing() {
   const session = await getSession();
@@ -16,7 +17,12 @@ export default async function Landing() {
             <span className="wordmark">Bitlab</span>
           </div>
           <div className="stats-row">
-            <Link className="btn btn-ghost" href={session ? primaryHref : "/login"} style={{ padding: "10px 18px" }}>
+            <ThemeToggle />
+            <Link
+              className="btn"
+              href={session ? primaryHref : "/login"}
+              style={{ padding: "10px 18px", background: "transparent", color: "var(--on-dark)", borderColor: "var(--on-dark)" }}
+            >
               {session ? "Dashboard" : "Log in"}
             </Link>
           </div>
