@@ -105,7 +105,7 @@ export default function ProjectBuilder({
   // ---- shipped screen ----
   if (shipped) {
     return (
-      <div className="lesson-shell center" style={{ paddingTop: 56 }}>
+      <div className="lesson-shell finish">
         <div style={{ fontSize: 56 }}>🚀</div>
         <h2 style={{ fontSize: 30, marginTop: 8 }}>Project shipped!</h2>
         <p className="muted mt8" style={{ maxWidth: "40ch", margin: "8px auto 0" }}>

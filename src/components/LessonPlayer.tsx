@@ -175,7 +175,7 @@ export default function LessonPlayer({
   // ---- completion screen ----
   if (finished) {
     return (
-      <div className="lesson-shell center" style={{ paddingTop: 60 }}>
+      <div className="lesson-shell finish">
         <div style={{ fontSize: 56 }}>🎉</div>
         <h2 style={{ fontSize: 28, marginTop: 8 }}>Lesson complete!</h2>
         <p className="muted mt8">Nice work, {userName}. Here's what you earned:</p>
@@ -209,7 +209,7 @@ export default function LessonPlayer({
   // Animated character intro before the challenges.
   if (phase === "intro" && lesson.explainer) {
     return (
-      <div className="lesson-shell">
+      <div className="lesson-shell" style={{ minHeight: "calc(100vh - 8px)", display: "flex", flexDirection: "column" }}>
         <div className="lesson-top">
           <Link href={learnHref} style={{ fontSize: 20, color: "var(--ink-2)" }} aria-label="Close">
             ✕
@@ -218,7 +218,11 @@ export default function LessonPlayer({
           <span style={{ marginLeft: "auto" }} />
           <ThemeToggle />
         </div>
-        <Explainer data={lesson.explainer} title={lesson.title} onDone={() => setPhase("play")} />
+        <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
+          <div style={{ width: "100%" }}>
+            <Explainer data={lesson.explainer} title={lesson.title} onDone={() => setPhase("play")} />
+          </div>
+        </div>
       </div>
     );
   }

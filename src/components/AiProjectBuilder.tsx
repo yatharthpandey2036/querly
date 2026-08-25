@@ -59,7 +59,7 @@ export default function AiProjectBuilder({ project }: { project: AiProject }) {
 
   if (shipped) {
     return (
-      <div className="lesson-shell center" style={{ paddingTop: 56 }}>
+      <div className="lesson-shell finish">
         <div style={{ fontSize: 56 }}>🚀</div>
         <h2 style={{ fontSize: 30, marginTop: 8 }}>App shipped!</h2>
         <p className="muted mt8" style={{ maxWidth: "40ch", margin: "8px auto 0" }}>

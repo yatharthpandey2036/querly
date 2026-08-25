@@ -8,7 +8,17 @@ export default function LoginPage({
   const initialRole = searchParams.role === "parent" ? "parent" : "student";
   const initialMode = searchParams.mode === "signup" ? "signup" : "login";
   return (
-    <div className="wrap" style={{ maxWidth: 460, paddingTop: 48, paddingBottom: 48 }}>
+    <div
+      style={{
+        maxWidth: 460,
+        margin: "0 auto",
+        padding: "0 24px",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
+    >
       <div className="center" style={{ marginBottom: 24 }}>
         <div className="brand" style={{ justifyContent: "center", fontSize: 24, color: "var(--ink)" }}>
           <span className="logo" style={{ width: 38, height: 38, fontSize: 22 }}>
