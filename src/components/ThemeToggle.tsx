@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { track } from "@/lib/analytics";
 
 export default function ThemeToggle() {
   const [dark, setDark] = useState(false);
@@ -13,6 +14,7 @@ export default function ThemeToggle() {
 
   function toggle() {
     const next = dark ? "light" : "dark";
+    track("Theme Toggled", { theme: next });
     document.documentElement.setAttribute("data-theme", next);
     try {
       localStorage.setItem("bitlab-theme", next);

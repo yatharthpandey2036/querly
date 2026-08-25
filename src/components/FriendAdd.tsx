@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "@/lib/analytics";
 
 export default function FriendAdd() {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function FriendAdd() {
       });
       const d = await res.json();
       if (res.ok) {
+        track("Friend Added");
         setOk(true);
         setMsg(`Added ${d.name}! 🎉`);
         setEmail("");

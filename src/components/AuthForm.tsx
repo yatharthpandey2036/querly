@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "@/lib/analytics";
 
 type Role = "student" | "parent";
 type Mode = "login" | "signup";
@@ -46,6 +47,7 @@ export default function AuthForm({
         setError(data.error || "Something went wrong.");
         return;
       }
+      track(mode === "signup" ? "Signed Up" : "Logged In", { role });
       router.push(data.redirect || "/learn");
       router.refresh();
     } catch {

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "@/lib/analytics";
 
 export default function Checkout({
   plan,
@@ -15,7 +16,13 @@ export default function Checkout({
   const router = useRouter();
   const [state, setState] = useState<"idle" | "processing" | "done">("idle");
 
+  useEffect(() => {
+    track("Checkout Started", { plan, price });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   async function pay() {
+    track("Payment Completed", { plan, price });
     setState("processing");
     // fake gateway delay so it feels like a real payment
     await new Promise((r) => setTimeout(r, 1500));

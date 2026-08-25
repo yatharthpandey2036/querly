@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { RACE_QUESTIONS, type RaceQ } from "@/content/race";
+import { track } from "@/lib/analytics";
 
 const DURATION = 60;
 const GHOST_TARGET = 12;
@@ -31,6 +32,7 @@ export default function QueryRace({ initialBoard }: { initialBoard: Row[] }) {
   const ghost = Math.min(GHOST_TARGET, Math.round(((DURATION - time) / DURATION) * GHOST_TARGET));
 
   function start() {
+    track("Race Started");
     setQs(shuffle(RACE_QUESTIONS));
     setQi(0);
     setScore(0);
@@ -54,6 +56,7 @@ export default function QueryRace({ initialBoard }: { initialBoard: Row[] }) {
 
   async function finish() {
     if (timer.current) clearInterval(timer.current);
+    track("Race Finished", { score, won: score >= GHOST_TARGET });
     setPhase("done");
     try {
       const res = await fetch("/api/race/submit", {

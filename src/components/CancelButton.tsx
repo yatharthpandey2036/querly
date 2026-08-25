@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "@/lib/analytics";
 
 export default function CancelButton() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function CancelButton() {
     setBusy(true);
     try {
       await fetch("/api/premium/cancel", { method: "POST" });
+      track("Plan Cancelled");
       router.refresh();
     } finally {
       setBusy(false);

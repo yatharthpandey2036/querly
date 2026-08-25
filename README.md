@@ -14,6 +14,19 @@ A **app that teaches SQL, databases and AI to students in class 9–12** through
 - **sql.js** (SQLite in WebAssembly) runs every lesson query in the browser
 - **jose** cookie sessions + **bcryptjs**
 - **@anthropic-ai/sdk** for the optional AI tutor
+- **Mixpanel** (`mixpanel-browser`) for product analytics
+
+## Analytics (Mixpanel)
+
+Set `NEXT_PUBLIC_MIXPANEL_TOKEN` in `.env.local` to start sending events (without it,
+events are wired but no-op and log to the browser console in dev). Instrumented events:
+
+`Page Viewed`, `Signed Up`, `Logged In`, `Lesson Started`, `Challenge Answered`
+(correct/wrong), `Lesson Completed`, `Project Completed`, `Paywall Hit`,
+`Premium Viewed`, `Checkout Started`, `Payment Completed`, `Plan Cancelled`,
+`Race Started`, `Race Finished`, `Friend Added`, `Notes Downloaded`, `Theme Toggled`.
+
+Users are identified by their id (`identify`) so events tie to a person.
 
 ## Run locally
 

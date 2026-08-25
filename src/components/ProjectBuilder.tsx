@@ -6,6 +6,7 @@ import type { CapstoneProject } from "@/content/projects";
 import { gradeQuery, type QueryResult } from "@/lib/sqlEngine";
 import ThemeToggle from "@/components/ThemeToggle";
 import Mascots from "@/components/Mascots";
+import { track } from "@/lib/analytics";
 
 export default function ProjectBuilder({
   project,
@@ -93,6 +94,7 @@ export default function ProjectBuilder({
           body: JSON.stringify({ projectId: project.id }),
         });
         const data = await res.json();
+        track("Project Completed", { projectId: project.id, kind: project.kind ?? "unit" });
         setShipped({ streakCount: data.streakCount ?? 0, alreadyDone: data.alreadyDone ?? false });
       } catch {
         setShipped({ streakCount: 0, alreadyDone: false });

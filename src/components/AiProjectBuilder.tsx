@@ -6,6 +6,7 @@ import type { AiProject } from "@/content/ai-projects";
 import OrderGame from "@/components/games/OrderGame";
 import ThemeToggle from "@/components/ThemeToggle";
 import Mascots from "@/components/Mascots";
+import { track } from "@/lib/analytics";
 
 export default function AiProjectBuilder({ project }: { project: AiProject }) {
   const steps = project.steps;
@@ -48,6 +49,7 @@ export default function AiProjectBuilder({ project }: { project: AiProject }) {
           body: JSON.stringify({ projectId: project.id }),
         });
         const data = await res.json();
+        track("Project Completed", { projectId: project.id, kind: project.kind ?? "unit" });
         setShipped({ streakCount: data.streakCount ?? 0, alreadyDone: data.alreadyDone ?? false });
       } catch {
         setShipped({ streakCount: 0, alreadyDone: false });

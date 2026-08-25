@@ -5,6 +5,7 @@ import { getProgressFor } from "@/lib/gamification";
 import { getUserPlan, PLANS } from "@/lib/premium";
 import TopBar from "@/components/TopBar";
 import CancelButton from "@/components/CancelButton";
+import TrackOnMount from "@/components/TrackOnMount";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,7 @@ export default async function PremiumPage() {
       <TopBar name={session.name} stats={{ streak: stats.streakCount, xp: stats.xp, gems: stats.gems, hearts: stats.hearts }} />
 
       <main className="wrap" style={{ paddingTop: 20, paddingBottom: 60, maxWidth: 900 }}>
+        <TrackOnMount event="Premium Viewed" />
         <Link className="btn btn-ghost" href="/learn" style={{ padding: "8px 14px", marginBottom: 18 }}>
           ← Back
         </Link>

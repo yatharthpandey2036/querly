@@ -8,6 +8,7 @@ import { gradeQuery, previewTable, type QueryResult } from "@/lib/sqlEngine";
 import Explainer from "@/components/Explainer";
 import ThemeToggle from "@/components/ThemeToggle";
 import Mascots from "@/components/Mascots";
+import { track as trackEvent } from "@/lib/analytics";
 import TapGame from "@/components/games/TapGame";
 import OrderGame from "@/components/games/OrderGame";
 import MatchGame from "@/components/games/MatchGame";
@@ -57,6 +58,7 @@ export default function LessonPlayer({
 
   // Games call this when the learner solves them interactively.
   function handleSolved() {
+    trackEvent("Challenge Answered", { lessonId: lesson.id, challengeId: challenge.id, type: challenge.type, correct: true });
     setStatus("correct");
     if (!solved.has(challenge.id)) {
       setSolved(new Set(solved).add(challenge.id));
@@ -64,6 +66,12 @@ export default function LessonPlayer({
       setTimeout(() => setToast(null), 1600);
     }
   }
+
+  // analytics: lesson opened
+  useEffect(() => {
+    trackEvent("Lesson Started", { lessonId: lesson.id, track });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // reset when moving to a new challenge
   useEffect(() => {
@@ -111,6 +119,7 @@ export default function LessonPlayer({
       setChecking(false);
     }
 
+    trackEvent("Challenge Answered", { lessonId: lesson.id, challengeId: challenge.id, type: challenge.type, correct });
     if (correct) {
       setStatus("correct");
       if (!solved.has(challenge.id)) {
@@ -163,6 +172,7 @@ export default function LessonPlayer({
           body: JSON.stringify({ lessonId: lesson.id, stars }),
         });
         const data = await res.json();
+        trackEvent("Lesson Completed", { lessonId: lesson.id, track, stars });
         setFinished({ streakCount: data.streakCount ?? 0, alreadyDone: data.alreadyDone ?? false });
       } catch {
         setFinished({ streakCount: 0, alreadyDone: false });
