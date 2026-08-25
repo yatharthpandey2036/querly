@@ -19,7 +19,10 @@ export default async function PremiumPage() {
     <>
       <TopBar name={session.name} stats={{ streak: stats.streakCount, xp: stats.xp, gems: stats.gems, hearts: stats.hearts }} />
 
-      <main className="wrap" style={{ paddingTop: 28, paddingBottom: 60, maxWidth: 900 }}>
+      <main className="wrap" style={{ paddingTop: 20, paddingBottom: 60, maxWidth: 900 }}>
+        <Link className="btn btn-ghost" href="/learn" style={{ padding: "8px 14px", marginBottom: 18 }}>
+          ← Back
+        </Link>
         <div className="center">
           <span className="eyebrow">Learnly Premium</span>
           <h2 style={{ fontSize: "clamp(28px,4vw,40px)", marginTop: 8 }}>Unlock the competition 🏆</h2>

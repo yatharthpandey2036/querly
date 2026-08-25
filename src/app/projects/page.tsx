@@ -5,7 +5,9 @@ import { getProgressFor } from "@/lib/gamification";
 import { getTrack } from "@/content/tracks";
 import { LIFE_SQL_PROJECTS } from "@/content/projects";
 import { LIFE_AI_PROJECTS } from "@/content/ai-projects";
+import { isPremium } from "@/lib/premium";
 import TopBar from "@/components/TopBar";
+import Paywall from "@/components/Paywall";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +19,17 @@ export default async function LifeProjectsPage({ searchParams }: { searchParams:
   const track = getTrack(searchParams.track).id;
   const { stats, completedLessonIds } = await getProgressFor(session.id);
   const doneSet = new Set(completedLessonIds);
+
+  if (!(await isPremium(session.id))) {
+    return (
+      <>
+        <TopBar name={session.name} stats={{ streak: stats.streakCount, xp: stats.xp, gems: stats.gems, hearts: stats.hearts }} />
+        <main className="wrap">
+          <Paywall feature="Real-life projects" />
+        </main>
+      </>
+    );
+  }
 
   const items =
     track === "ai"

@@ -1,6 +1,22 @@
-import { neon } from "@neondatabase/serverless";
+import { neon, neonConfig } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
+
+// Retry the driver's HTTP fetch a few times. Neon's free tier suspends the
+// compute when idle; the first query after a wake can fail with "fetch failed"
+// until it's up. This makes those cold-starts transparent instead of 500s.
+neonConfig.fetchFunction = async (input: RequestInfo | URL, init?: RequestInit) => {
+  let lastErr: unknown;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    try {
+      return await fetch(input, init);
+    } catch (e) {
+      lastErr = e;
+      await new Promise((r) => setTimeout(r, 300 * (attempt + 1)));
+    }
+  }
+  throw lastErr;
+};
 
 const connectionString = process.env.DATABASE_URL;
 

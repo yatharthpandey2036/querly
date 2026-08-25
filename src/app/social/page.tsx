@@ -37,7 +37,10 @@ export default async function SocialPage() {
   return (
     <>
       {topbar}
-      <main className="wrap" style={{ paddingTop: 24, paddingBottom: 60, maxWidth: 1000 }}>
+      <main className="wrap" style={{ paddingTop: 20, paddingBottom: 60, maxWidth: 1000 }}>
+        <Link className="btn btn-ghost" href="/learn" style={{ padding: "8px 14px", marginBottom: 18 }}>
+          ← Back
+        </Link>
         <div className="spread" style={{ flexWrap: "wrap", gap: 12 }}>
           <div>
             <span className="eyebrow">Compete</span>

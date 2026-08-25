@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { getProgressFor } from "@/lib/gamification";
@@ -34,7 +35,10 @@ export default async function RacePage() {
   return (
     <>
       {topbar}
-      <main className="wrap" style={{ paddingTop: 40, paddingBottom: 60 }}>
+      <main className="wrap" style={{ paddingTop: 20, paddingBottom: 60 }}>
+        <Link className="btn btn-ghost" href="/social" style={{ padding: "8px 14px", marginBottom: 24 }}>
+          ← Back
+        </Link>
         <QueryRace initialBoard={board} />
       </main>
     </>

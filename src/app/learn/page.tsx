@@ -6,6 +6,7 @@ import { TRACKS, getTrack, curriculumFor } from "@/content/tracks";
 import { projectForUnit } from "@/content/projects";
 import { aiProjectForUnit } from "@/content/ai-projects";
 import { getUserPlan } from "@/lib/premium";
+import { lessonRequiresPremium, projectRequiresPremium } from "@/lib/access";
 import TopBar from "@/components/TopBar";
 
 export const dynamic = "force-dynamic";
@@ -24,6 +25,7 @@ export default async function LearnPage({ searchParams }: { searchParams: { trac
   const { stats, completedLessonIds } = await getProgressFor(session.id);
   const doneSet = new Set(completedLessonIds);
   const plan = await getUserPlan(session.id);
+  const premium = plan !== "free";
 
   const order = curriculum.flatMap((u) => u.lessons.map((l) => l.id));
   const currentIndex = order.findIndex((id) => !doneSet.has(id));
@@ -89,6 +91,23 @@ export default async function LearnPage({ searchParams }: { searchParams: { trac
                     const locked = !isDone && !isCurrent && idx > currentIndex && currentIndex !== -1;
                     const nodeClass = isDone ? "done" : isCurrent ? "current" : locked ? "locked" : "done";
                     const glyph = isDone ? "✓" : isCurrent ? "▶" : locked ? "🔒" : "•";
+                    const premiumLocked = !premium && !isDone && lessonRequiresPremium(lesson.id);
+                    if (premiumLocked) {
+                      return (
+                        <Link href="/premium" key={lesson.id}>
+                          <div className="lesson-row" style={{ opacity: 0.85 }}>
+                            <div className="node" style={{ background: "var(--surface-3)", color: "var(--gold)" }}>🔒</div>
+                            <div className="lesson-meta">
+                              <h4>{lesson.title}</h4>
+                              <p>{lesson.subtitle}</p>
+                            </div>
+                            <div>
+                              <span className="tag t-gold">Premium</span>
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    }
                     return (
                       <div className="lesson-row" key={lesson.id} style={{ opacity: locked ? 0.6 : 1 }}>
                         {locked ? (
@@ -128,21 +147,34 @@ export default async function LearnPage({ searchParams }: { searchParams: { trac
                     const aiP = aiProjectForUnit(unit.id);
                     const project = sqlP ?? aiP;
                     if (!project) return null;
-                    const href = sqlP ? `/project/${sqlP.id}` : `/ai-project/${aiP!.id}`;
                     const unitDone = unit.lessons.every((l) => doneSet.has(l.id));
                     const projDone = doneSet.has(project.id);
-                    const locked = !unitDone && !projDone;
+                    const premiumLocked = !premium && !projDone && projectRequiresPremium(project.id);
+                    const href = premiumLocked ? "/premium" : sqlP ? `/project/${sqlP.id}` : `/ai-project/${aiP!.id}`;
+                    const locked = !unitDone && !projDone && !premiumLocked;
                     const inner = (
                       <div className="lesson-row project-row">
-                        <div className="node" style={{ background: locked ? "var(--surface-3)" : "var(--dark)", color: locked ? "var(--ink-3)" : "var(--lime)" }}>
-                          {projDone ? "✓" : locked ? "🔒" : "★"}
+                        <div
+                          className="node"
+                          style={{
+                            background: projDone ? "var(--dark)" : premiumLocked || locked ? "var(--surface-3)" : "var(--dark)",
+                            color: premiumLocked ? "var(--gold)" : locked ? "var(--ink-3)" : "var(--lime)",
+                          }}
+                        >
+                          {projDone ? "✓" : premiumLocked || locked ? "🔒" : "★"}
                         </div>
                         <div className="lesson-meta">
                           <h4>🚀 Project · {project.title}</h4>
                           <p>{project.tagline}</p>
                         </div>
                         <div>
-                          {projDone ? <span className="tag t-brand">shipped</span> : !locked ? <span className="tag t-gold">build</span> : null}
+                          {projDone ? (
+                            <span className="tag t-brand">shipped</span>
+                          ) : premiumLocked ? (
+                            <span className="tag t-gold">Premium</span>
+                          ) : !locked ? (
+                            <span className="tag t-gold">build</span>
+                          ) : null}
                         </div>
                       </div>
                     );
@@ -186,7 +218,7 @@ export default async function LearnPage({ searchParams }: { searchParams: { trac
             </div>
 
             <Link className="card pad" href={`/projects?track=${track}`} style={{ display: "block" }}>
-              <span className="eyebrow">🌍 Real life</span>
+              <span className="eyebrow">{premium ? "🌍 Real life" : "🔒 Real life · Premium"}</span>
               <h4 style={{ fontSize: 16, marginTop: 8 }}>Use it in real life →</h4>
               <p className="muted small mt8">Short, no-pressure projects: pocket money, watchlists, scam-spotting…</p>
             </Link>

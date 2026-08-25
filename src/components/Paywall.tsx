@@ -8,9 +8,12 @@ export default function Paywall({ feature }: { feature: string }) {
       <p className="muted mt8" style={{ maxWidth: "40ch", margin: "8px auto 0" }}>
         Learning AI &amp; SQL is always free. Premium unlocks Leagues, Friends and Query Race.
       </p>
-      <div className="mt24">
+      <div className="mt24" style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
         <Link className="btn btn-primary" href="/premium">
           See plans — ₹170/mo →
+        </Link>
+        <Link className="btn btn-ghost" href="/learn">
+          ← Back to learning
         </Link>
       </div>
     </div>
